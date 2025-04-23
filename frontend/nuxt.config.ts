@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@primevue/nuxt-module',
     "@nuxtjs/tailwindcss",
+    "@vesp/nuxt-fontawesome",
   ],
   i18n: {
     langDir: '',
@@ -33,4 +34,10 @@ export default defineNuxtConfig({
     fix: true,
     lintOnStart: false,
   },
+  fontawesome: {
+    icons: {
+      solid: ['cog', 'trash' ], // <-- here go all the icons you want to add
+    },
+    component: 'Icon',
+  }
 })
