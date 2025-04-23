@@ -7,7 +7,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxtjs/i18n',
-    '@primevue/nuxt-module'
+    '@primevue/nuxt-module',
+    "@nuxtjs/tailwindcss",
   ],
   i18n: {
     langDir: '',
@@ -15,6 +16,11 @@ export default defineNuxtConfig({
     locales: [
       { "code": "en", "language": 'en-US', "file": "en.json", "dir": "ltr" }
     ]
+  },
+  tailwindcss: {
+    exposeConfig: true,
+    viewer: true,
+    plugins: [require('tailwindcss-primeui')]
   },
   primevue: {
     options: {
