@@ -1,11 +1,10 @@
 // eslint.config.js
 import eslint from "@eslint/js";
-import vuePlugin from "eslint-plugin-vue"; // ✅ Import correctly
-import tsPlugin from "@typescript-eslint/eslint-plugin"; // ✅ Import correctly
+import vuePlugin from "eslint-plugin-vue";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import importPlugin from "eslint-plugin-import";
-import nuxtPlugin from "eslint-plugin-nuxt"; // ✅ Added Nuxt plugin
-
+import nuxtPlugin from "eslint-plugin-nuxt";
 
 
 export default [
