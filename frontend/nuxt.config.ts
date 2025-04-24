@@ -4,12 +4,15 @@ import Aura from '@primevue/themes/aura';
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
+  pages: true,
   modules: [
     '@nuxt/eslint',
     '@nuxtjs/i18n',
     '@primevue/nuxt-module',
     "@nuxtjs/tailwindcss",
     "@vesp/nuxt-fontawesome",
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt'
   ],
   i18n: {
     langDir: '',
@@ -36,8 +39,11 @@ export default defineNuxtConfig({
   },
   fontawesome: {
     icons: {
-      solid: ['cog', 'trash' ], // <-- here go all the icons you want to add
+      solid: ['cog', 'trash' ],
     },
     component: 'Icon',
-  }
+  },
+  axios: {
+    baseURL: process.env.API_BASE_URL,
+  },
 })
