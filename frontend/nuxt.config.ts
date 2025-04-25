@@ -5,6 +5,15 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   pages: true,
+  ssr: false,
+  runtimeConfig: {
+    public: {
+      apiBase: '', // is overridden by NUXT_PUBLIC_API_BASE environment variable
+      moment: {
+        locale: 'de'
+      }
+    }
+  },
   modules: [
     '@nuxt/eslint',
     '@nuxtjs/i18n',
@@ -12,8 +21,12 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@vesp/nuxt-fontawesome",
     '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt'
+    'pinia-plugin-persistedstate/nuxt',
+    './modules/moment'
   ],
+  moment: {
+    locale: 'de' // oder 'es', 'fr', 'en-gb' etc.
+  },
   i18n: {
     langDir: '',
     locale: 'en',
@@ -42,8 +55,5 @@ export default defineNuxtConfig({
       solid: ['cog', 'trash' ],
     },
     component: 'Icon',
-  },
-  axios: {
-    baseURL: process.env.API_BASE_URL,
-  },
+  }
 })

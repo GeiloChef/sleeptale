@@ -17,6 +17,7 @@
     "@primevue/forms": "^4.3.3",
     "@primevue/themes": "^4.3.3",
     "@vesp/nuxt-fontawesome": "^1.2.1",
+    "moment": "^2.30.1",
     "nuxt": "^3.16.2",
     "pinia": "^3.0.2",
     "pinia-plugin-persistedstate": "^4.2.0",

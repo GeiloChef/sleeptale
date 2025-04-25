@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "types": ["node", "vue", "nuxt"],
+    "types": ["node", "vue", "nuxt", "@nuxtjs/axios", "@nuxtjs/moment"],
     "files": ["node_modules/@vue/runtime-core/dist/runtime-core.d.ts"],
     "baseUrl": ".",
     "paths": {
