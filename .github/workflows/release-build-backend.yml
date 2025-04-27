@@ -11,21 +11,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        
       - name: Set up Node.js
         uses: actions/setup-node@v4.0.2
         with:
           node-version: '20'
+          
       - name: Build Backend
         run: |
           npm ci
           npm run build
-        working-directory: ./frontend
+        working-directory: ./backend
+
+      - name: Show files after build
+        run: ls -la backend
+        
       - name: Push to Branch
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
           BRANCH: release-build-backend # The branch name where you want to push the assets
-          FOLDER: ./dist
+          FOLDER: bbackend/./dist
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
           MESSAGE: "Build: ({sha}) {msg}" # The commit message
  
