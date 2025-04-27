@@ -17,8 +17,9 @@ jobs:
           node-version: '20'
       - name: Build Backend
         run: |
-          npm i
+          npm ci
           npm run build
+        working-directory: ./frontend
       - name: Push to Branch
         uses: s0/git-publish-subdir-action@develop
         env:
