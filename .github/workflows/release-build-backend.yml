@@ -1,9 +1,6 @@
 name: Release Build FTP
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 permissions:
   contents: write
@@ -20,8 +17,8 @@ jobs:
           node-version: '20'
       - name: Build Backend
         run: |
-          run: npm ci
-          npm npm run build
+          npm ci
+          npm run build
       - name: Push to Branch
         uses: s0/git-publish-subdir-action@develop
         env:
