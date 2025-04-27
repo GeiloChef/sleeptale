@@ -34,4 +34,22 @@ jobs:
           FOLDER: backend/dist
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
           MESSAGE: "Build: ({sha}) {msg}" # The commit message
- 
+
+  web-deploy:
+    name: Deploy on webserver
+    runs-on: ubuntu-latest
+    needs: publish
+    steps:
+    - name: Get latest code
+      uses: actions/checkout@v4
+      with:
+          ref: 'release-build'
+    - name: Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        protocol: ftps
+        server-dir: 'sleeptale/'
+   
