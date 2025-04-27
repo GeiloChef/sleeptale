@@ -28,10 +28,13 @@ jobs:
         run: npm run generate
         working-directory: ./frontend
 
+      - name: Show files after build
+        run: ls -la frontend/.output/
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
-          folder: .output/public
+          folder: frontend/.output/public
           clean: true
           clean-exclude: |
             "CNAME"
