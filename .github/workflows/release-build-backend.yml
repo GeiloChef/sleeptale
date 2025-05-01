@@ -9,47 +9,17 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Set up Node.js
-        uses: actions/setup-node@v4.0.2
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
         with:
-          node-version: '20'
-          
-      - name: Build Backend
-        run: |
-          npm ci
-          npm run build
-        working-directory: ./backend
-
-      - name: Show files after build
-        run: ls -la backend
-        
-      - name: Push to Branch
-        uses: s0/git-publish-subdir-action@develop
-        env:
-          REPO: self
-          BRANCH: release-build-backend # The branch name where you want to push the assets
-          FOLDER: backend/dist
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
-          MESSAGE: "Build: ({sha}) {msg}" # The commit message
-
-  web-deploy:
-    name: Deploy on webserver
-    runs-on: ubuntu-latest
-    needs: publish
-    steps:
-    - name: Get latest code
-      uses: actions/checkout@v4
-      with:
-          ref: ' release-build-backend'
-    - name: Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USER }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        protocol: ftps
-        server-dir: 'sleeptale/'
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            cd /home/sleeptale-backend
+            git pull origin release-build-backend
+            npm ci
+            npm run build
+            pm2 reload sleeptale-backend || pm2 start dist/main.js --name sleeptale-backend
    
