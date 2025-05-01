@@ -17,8 +17,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd /home/sleeptale-backend
-            git pull origin release-build-backend
+            cd /home/sleeptale
+            git pull origin master
+            cd backend
             npm ci
             npm run build
             pm2 reload sleeptale-backend || pm2 start dist/main.js --name sleeptale-backend
