@@ -8,6 +8,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+
     steps:     
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
@@ -17,11 +18,24 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            # Add GitHub's SSH key to known hosts
+            mkdir -p ~/.ssh
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            
+            # Set git to accept the directory as safe
             git config --global --add safe.directory /home/deploy/sleeptale
+
+            # Navigate to the project folder
             cd /home/deploy/sleeptale
+            
+            # Ensure we have the correct permissions for the repo
+            chown -R deploy:deploy /home/deploy/sleeptale
+
+            # Pull the latest changes
             git pull origin master
+
+            # Build and restart the backend
             cd backend
             npm ci
             npm run build
             pm2 reload sleeptale-backend || pm2 start dist/main.js --name sleeptale-backend
-   
