@@ -17,8 +17,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            git config --global --add safe.directory /home/sleeptale
-            cd /home/sleeptale
+            git config --global --add safe.directory /home/deploy/sleeptale
+            cd /home/deploy/sleeptale
             git pull origin master
             cd backend
             npm ci
