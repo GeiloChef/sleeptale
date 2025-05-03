@@ -1,13 +1,13 @@
 // src/stories/stories.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {AiService} from "../ai/ai.service";
+import { AiService } from '../ai/ai.service';
 
 @Injectable()
 export class StoriesService {
   constructor(
     private prisma: PrismaService,
-    private aiService: AiService
+    private aiService: AiService,
   ) {}
 
   async create(title: string, content: string) {
@@ -16,7 +16,7 @@ export class StoriesService {
         title,
         sections: {
           create: [{ text: 'test2', order: 1 }],
-        }
+        },
       },
     });
   }
@@ -51,7 +51,6 @@ export class StoriesService {
     const today = new Date();
     const startOfDay = new Date(today.setHours(0, 0, 0, 0));
     const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-
 
     const todayStory = await this.prisma.story.findFirst({
       where: {
@@ -91,27 +90,23 @@ export class StoriesService {
     };
   }
 
-
   async findStoryByDate(date: Date) {
+    const inputDate = new Date(date); // This is UTC
+
+    const year = inputDate.getUTCFullYear();
+    const month = inputDate.getUTCMonth();
+    const day = inputDate.getUTCDate();
+
+    const startOfDay = new Date(Date.UTC(year, month, day, 0, 0, 0));
+    const endOfDay = new Date(Date.UTC(year, month, day, 23, 59, 59, 999));
+
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-
-    const inputDate = new Date(date);
-    inputDate.setHours(0, 0, 0, 0);
-
-    if (inputDate > yesterday) {
-      //todo: return correct state object to display issue
-      throw new Error('Nur Daten bis einschließlich gestern sind erlaubt.');
-      console.log('Nur Daten bis einschließlich gestern sind erlaubt.');
+    if (inputDate > today) {
+      throw new Error('Nur Daten bis einschließlich heute sind erlaubt.');
     }
 
-    const startOfDay = new Date(inputDate.setHours(0, 0, 0, 0));
-    const endOfDay = new Date(inputDate.setHours(23, 59, 59, 999));
-
-    const existingStory = this.prisma.story.findFirst({
+    const existingStory = await this.prisma.story.findFirst({
       where: {
         scheduledAt: {
           gte: startOfDay,
@@ -155,6 +150,6 @@ export class StoriesService {
     return this.prisma.story.findUnique({
       where: { id: story.id },
       include: { sections: true },
-    });;
+    });
   }
 }

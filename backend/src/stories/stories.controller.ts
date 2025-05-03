@@ -1,4 +1,11 @@
-import {Controller, Post, Get, Body, Query, BadRequestException} from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Query,
+  BadRequestException,
+} from '@nestjs/common';
 import { StoriesService } from './stories.service';
 
 @Controller('stories')
@@ -27,12 +34,12 @@ export class StoriesController {
 
   @Post('/generate')
   generateStory() {
-    // return this.storiesService.generateAndSaveStory();
+    //return this.storiesService.generateAndSaveStory();
   }
 
   @Get('/by-date')
   async getByDate(@Query('date') dateStr: string) {
-    const date = new Date(dateStr);
+    const date = new Date(Number(dateStr));
 
     if (isNaN(date.getTime())) {
       throw new BadRequestException('Ungültiges Datum.');
