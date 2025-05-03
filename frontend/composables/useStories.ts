@@ -9,11 +9,17 @@ export const useStories = () => {
     return mapStoryApiToDomain(data.value as StoryDto);
   }
 
+  const getStoryByDate = async (date: number): Promise<StoryDto> => {
+    const { data, error } = await useFetch(`${apiBase}/stories/by-date?date=${date}`);
+    if (error.value) throw error.value
+    return mapStoryApiToDomain(data.value as StoryDto);
+  }
+
   const getByDate = async (date: string) => {
     const { data, error } = await useFetch(`/stories/by-date?date=${date}`)
     if (error.value) throw error.value
     return data.value
   }
 
-  return { getToday, getByDate }
+  return { getToday, getByDate, getStoryByDate }
 }
