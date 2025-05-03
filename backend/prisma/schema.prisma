@@ -8,11 +8,12 @@ datasource db {
 }
 
 model Story {
-  id          Int        @id @default(autoincrement())
-  title       String
-  createdAt   DateTime   @default(now())
-  scheduledAt DateTime?
-  sections    Section[]
+  id            Int         @id @default(autoincrement())
+  title         String
+  createdAt     DateTime    @default(now())
+  description   String      @default("")
+  scheduledAt   DateTime?
+  sections      Section[]
 }
 
 model Section {
