@@ -4,6 +4,7 @@ export const createDefaultStory = (): StoryDto => {
   return {
     createdAt: '1746223200000',
     sections: createDefaultSections(),
+    description: 'Eine kleine Geschichte über den tapferen Teddybär, der sich aufmachte, um das Geheimnis des Waldes zu erkunden.',
     title: "Das Abenteuer der kleinen Eule Ella",
     scheduledAt: '1746136800000',
     id: 0
