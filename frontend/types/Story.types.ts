@@ -9,6 +9,7 @@ export interface Section {
 export interface StoryDto {
   id: number
   title: string
+  description: string
   createdAt: string
   scheduledAt?: string | null
   sections: Section[]

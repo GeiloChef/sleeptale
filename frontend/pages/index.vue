@@ -8,6 +8,10 @@
      {{ selectedStory.title }}
    </span>
 
+   <span class="text-2xl text-center">
+     {{ selectedStory.description }}
+   </span>
+
    <div>
      <Button @click="goToTodayStory">
        {{ $t('read-now') }}
@@ -28,4 +32,8 @@ const router = useRouter();
 const goToTodayStory = () => {
   router.push({ name: 'story-date___en', params: { date: moment().format(MomentFormat.Date) } })
 }
+
+  onMounted(async (): Promise<void> => {
+    await storyStore.fetchStoryByDate(moment());
+  });
 </script>
