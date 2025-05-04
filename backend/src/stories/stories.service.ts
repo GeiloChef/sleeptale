@@ -152,4 +152,23 @@ export class StoriesService {
       include: { sections: true },
     });
   }
+
+  async getAllAvailableStories() {
+    const today = new Date();
+    today.setHours(23, 59, 59, 0);
+
+    const availableStories = await this.prisma.story.findMany({
+      where: {
+        scheduledAt: {
+          lte: today,
+        },
+      },
+      include: {
+        sections: {
+          orderBy: { order: 'asc' },
+        },
+      },
+    });
+    return availableStories || [];
+  }
 }

@@ -51,4 +51,13 @@ export class StoriesController {
       throw new BadRequestException(error.message);
     }
   }
+
+  @Get('/all')
+  async getAllAvailable() {
+    try {
+      return await this.storiesService.getAllAvailableStories();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 }
