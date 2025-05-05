@@ -23,6 +23,7 @@
 <script setup lang="ts">
 
 import {MomentFormat} from "@/types/Core.Types";
+import {navigateToStoryPage} from "@/utils/Story.Utils";
 
 const storyStore = useStoryStore();
 const { selectedStory } = storeToRefs(storyStore);
@@ -30,10 +31,10 @@ const { selectedStory } = storeToRefs(storyStore);
 const router = useRouter();
 
 const goToTodayStory = () => {
-  router.push({ name: 'story-date___en', params: { date: moment().format(MomentFormat.Date) } })
+  navigateToStoryPage(moment().format(MomentFormat.DateUrl));
 }
 
-  onMounted(async (): Promise<void> => {
-    await storyStore.fetchStoryByDate(moment());
-  });
+onMounted(async (): Promise<void> => {
+  await storyStore.fetchStoryByDate(moment());
+});
 </script>

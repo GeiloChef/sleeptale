@@ -1,3 +1,5 @@
 export enum MomentFormat {
-  "Date" =  "DD-MM-YYYY",
+  DateUrl =  "DD-MM-YYYY",
+  DateDisplay =  "DD.MM.YYYY",
+  UrlParam = "YYYY-MM-DD"
 }

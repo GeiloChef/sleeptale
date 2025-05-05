@@ -110,7 +110,7 @@ const nextPageLabel = computed((): string => {
 
 onMounted(async (): Promise<void> => {
   if (route.params.date) {
-    await storyStore.fetchStoryByDate(moment(route.params.date, MomentFormat.Date));
+    await storyStore.fetchStoryByDate(moment(route.params.date, MomentFormat.DateUrl));
   }
 })
 </script>

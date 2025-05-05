@@ -1,6 +1,13 @@
-import type {Section, StoryDto} from "@/types/Story.types";
+import type {Section, StoryWithSections} from "@/types/Story.types";
+import type {Moment} from "moment";
+import {MomentFormat} from "@/types/Core.Types";
 
-export const createDefaultStory = (): StoryDto => {
+export const navigateToStoryPage= (date: Moment): void => {
+  const router = useRouter();
+  router.push({ name: 'story-date___en', params: { date: date } })
+}
+
+export const createDefaultStory = (): StoryWithSections => {
   return {
     createdAt: '1746223200000',
     sections: createDefaultSections(),

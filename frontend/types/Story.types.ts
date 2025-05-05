@@ -6,7 +6,7 @@ export interface Section {
   storyId: number
 }
 
-export interface StoryDto {
+export interface StoryWithSections {
   id: number
   title: string
   description: string
@@ -14,3 +14,5 @@ export interface StoryDto {
   scheduledAt?: string | null
   sections: Section[]
 }
+
+export type StoryWithoutSections = Omit<StoryWithSections, 'sections'>;

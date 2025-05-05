@@ -1,8 +1,8 @@
-import type {Section, StoryDto} from "@/types/Story.types";
+import type {StoryWithoutSections, StoryWithSections} from "@/types/Story.types";
 
-export const mapStoryApiToDomain = (story: StoryDto): StoryDto => {
+export const mapStoryApiToDomainWithSections = (story: StoryWithSections): StoryWithSections => {
   return {
     ...story,
-    sections: story.sections.sort((a, b) => a.order - b.order)
+    sections: story.sections ? story.sections.sort((a, b) => a.order - b.order) : []
   }
 }
