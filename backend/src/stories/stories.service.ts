@@ -163,11 +163,6 @@ export class StoriesService {
           lte: today,
         },
       },
-      include: {
-        sections: {
-          orderBy: { order: 'asc' },
-        },
-      },
     });
     return availableStories || [];
   }
