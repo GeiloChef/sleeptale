@@ -1,18 +1,24 @@
-import type {StoryDto} from "@/types/Story.types";
-import {mapStoryApiToDomain} from "@/utils/mappers/Story.Mapper";
+import type {StoryWithoutSections, StoryWithSections} from "@/types/Story.types";
+import {mapStoryApiToDomainWithSections} from "@/utils/mappers/Story.Mapper";
 
 export const useStories = () => {
   const apiBase = useRuntimeConfig().public.apiBase || 'http://localhost:4000';
-  const getToday = async (): Promise<StoryDto> => {
+  const getToday = async (): Promise<StoryWithSections> => {
     const { data, error } = await useFetch(`${apiBase}/stories/today`);
     if (error.value) throw error.value
-    return mapStoryApiToDomain(data.value as StoryDto);
+    return mapStoryApiToDomainWithSections(data.value as StoryWithSections);
   }
 
-  const getStoryByDate = async (date: number): Promise<StoryDto> => {
+  const getStoryByDate = async (date: string): Promise<StoryWithSections> => {
     const { data, error } = await useFetch(`${apiBase}/stories/by-date?date=${date}`);
     if (error.value) throw error.value
-    return mapStoryApiToDomain(data.value as StoryDto);
+    return mapStoryApiToDomainWithSections(data.value as StoryWithSections);
+  }
+
+  const getAllAvailableStories = async (): Promise<StoryWithoutSections[]> => {
+    const { data , error } = await useFetch<StoryWithoutSections[]>(`${apiBase}/stories/all`);
+    if (error.value || !data.value) throw error.value
+    return data.value;
   }
 
   const getByDate = async (date: string) => {
@@ -21,5 +27,5 @@ export const useStories = () => {
     return data.value
   }
 
-  return { getToday, getByDate, getStoryByDate }
+  return { getToday, getByDate, getStoryByDate, getAllAvailableStories }
 }
