@@ -39,7 +39,7 @@ export class StoriesController {
 
   @Get('/by-date')
   async getByDate(@Query('date') dateStr: string) {
-    const date = new Date(Number(dateStr));
+    const date = new Date(dateStr);
 
     if (isNaN(date.getTime())) {
       throw new BadRequestException('Ungültiges Datum.');
