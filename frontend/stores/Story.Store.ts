@@ -11,11 +11,6 @@ export const useStoryStore = defineStore('storyStore', () => {
   const selectedStory = ref<StoryWithSections>(createDefaultStory());
   const allAvailableStories = ref<StoryWithoutSections[]>([]);
 
-  const getStoryForToday = async () => {
-    const fetchedStory = await getToday();
-    selectedStory.value = fetchedStory;
-  }
-
   const fetchStoryByDate = async (date: Moment): Promise<void> => {
     const fetchedStory = await getStoryByDate(date.format(MomentFormat.UrlParam));
     selectedStory.value = fetchedStory;
@@ -29,7 +24,6 @@ export const useStoryStore = defineStore('storyStore', () => {
   return {
     selectedStory,
     allAvailableStories,
-    getStoryForToday,
     fetchStoryByDate,
     fetchAllStories
   }
