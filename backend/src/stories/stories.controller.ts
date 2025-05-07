@@ -27,11 +27,6 @@ export class StoriesController {
     return this.storiesService.createTest();
   }
 
-  @Get('/today')
-  getToday() {
-    return this.storiesService.getStoryForToday();
-  }
-
   @Post('/generate')
   generateStory() {
     //return this.storiesService.generateAndSaveStory();

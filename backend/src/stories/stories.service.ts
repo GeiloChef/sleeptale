@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AiService } from '../ai/ai.service';
+import { formatDate } from '../common/utils/date.utils';
 
 @Injectable()
 export class StoriesService {
@@ -40,14 +41,14 @@ export class StoriesService {
     return this.prisma.story.findMany();
   }
 
-  async assignScheduledDate(storyId: number, date: Date) {
+  async assignScheduledDate(storyId: number, date: string) {
     return this.prisma.story.update({
       where: { id: storyId },
       data: { scheduledAt: date },
     });
   }
 
-  async getStoryForToday() {
+  /*  async getStoryForToday() {
     const today = new Date();
     const startOfDay = new Date(today.setHours(0, 0, 0, 0));
     const endOfDay = new Date(today.setHours(23, 59, 59, 999));
@@ -88,30 +89,21 @@ export class StoriesService {
       ...unscheduled,
       scheduledAt: startOfDay,
     };
-  }
+  }*/
 
   async findStoryByDate(date: Date) {
-    const inputDate = new Date(date); // This is UTC
-
-    const year = inputDate.getUTCFullYear();
-    const month = inputDate.getUTCMonth();
-    const day = inputDate.getUTCDate();
-
-    const startOfDay = new Date(Date.UTC(year, month, day, 0, 0, 0));
-    const endOfDay = new Date(Date.UTC(year, month, day, 23, 59, 59, 999));
-
+    const inputDate = new Date(date);
     const today = new Date();
 
     if (inputDate > today) {
       throw new Error('Nur Daten bis einschließlich heute sind erlaubt.');
     }
 
+    const formattedDate = formatDate(inputDate);
+
     const existingStory = await this.prisma.story.findFirst({
       where: {
-        scheduledAt: {
-          gte: startOfDay,
-          lte: endOfDay,
-        },
+        scheduledAt: formattedDate,
       },
       include: {
         sections: {
@@ -126,8 +118,6 @@ export class StoriesService {
 
   async generateAndSaveStory() {
     const storyData = await this.aiService.generateStory();
-
-    console.dir(storyData);
 
     const story = await this.prisma.story.create({
       data: {
@@ -154,13 +144,12 @@ export class StoriesService {
   }
 
   async getAllAvailableStories() {
-    const today = new Date();
-    today.setHours(23, 59, 59, 0);
+    const formattedDate = formatDate(new Date());
 
     const availableStories = await this.prisma.story.findMany({
       where: {
         scheduledAt: {
-          lte: today,
+          lte: formattedDate,
         },
       },
     });
