@@ -109,6 +109,8 @@ const nextPageLabel = computed((): string => {
 });
 
 onMounted(async (): Promise<void> => {
+  endStory();
+
   if (route.params.date) {
     await storyStore.fetchStoryByDate(moment(route.params.date, MomentFormat.DateUrl));
   }
