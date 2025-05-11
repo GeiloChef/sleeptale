@@ -1,10 +1,10 @@
 import type {Section, StoryWithSections} from "@/types/Story.types";
 import type {Moment} from "moment";
 import {MomentFormat} from "@/types/Core.Types";
+import {navigateByRouteName} from "@/utils/Navigation.Utils";
 
 export const navigateToStoryPage= (date: Moment): void => {
-  const router = useRouter();
-  router.push({ name: 'story-date___en', params: { date: date } })
+  navigateByRouteName('story-date', { date: date })
 }
 
 export const createDefaultStory = (): StoryWithSections => {
