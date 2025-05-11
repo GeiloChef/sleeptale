@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   ssr: false,
   runtimeConfig: {
     public: {
-      apiBase: '', // is overridden by NUXT_PUBLIC_API_BASE environment variable
+      apiBase: '',
       moment: {
         locale: 'de'
       }
@@ -29,9 +29,10 @@ export default defineNuxtConfig({
   },
   i18n: {
     langDir: '',
-    locale: 'en',
+    locale: 'de',
     locales: [
-      { "code": "en", "language": 'en-US', "file": "en.json", "dir": "ltr" }
+      { "code": "en", "language": 'en-US', "file": "en.json", "dir": "ltr" },
+      { "code": "de", "language": 'de-DE', "file": "de.json", "dir": "ltr" }
     ]
   },
   tailwindcss: {
@@ -52,7 +53,13 @@ export default defineNuxtConfig({
   },
   fontawesome: {
     icons: {
-      solid: ['cog', 'trash' ],
+      solid: [
+        'cog',
+        'trash',
+        'bars',
+        'bars-staggered',
+        'book-open'
+      ],
     },
     component: 'Icon',
   }
