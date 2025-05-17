@@ -4,10 +4,14 @@ import { AppService } from './app.service';
 import { StoriesModule } from './stories/stories.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AiModule } from './ai/ai.module';
-import {ConfigModule} from "@nestjs/config";
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}` || '.env',
+    }),
     PrismaModule,
     StoriesModule,
     AiModule,
