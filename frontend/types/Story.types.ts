@@ -10,6 +10,7 @@ export interface StoryWithSections {
   id: number
   title: string
   description: string
+  imageUrl?: string | null
   createdAt: string
   scheduledAt?: string | null
   sections: Section[]

@@ -3,6 +3,12 @@
     <div
         v-if="!isInReadMode"
         class="h-full flex flex-col gap-16 justify-center items-center">
+      <div>
+        <Image
+            v-if="selectedStory.imageUrl"
+            :src="imageUrl(selectedStory.imageUrl)" />
+      </div>
+
       <span class="text-4xl text-center">
         {{ selectedStory.title }}
       </span>
@@ -52,6 +58,7 @@ import {onMounted} from "vue";
 import {useRoute} from "nuxt/app";
 import {MomentFormat} from "@/types/Core.Types";
 import type {Section} from "@/types/Story.types";
+import {imageUrl} from "@/utils/Image.Utils";
 
 const route = useRoute();
 
