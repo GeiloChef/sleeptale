@@ -12,6 +12,7 @@ model Story {
   title         String
   createdAt     DateTime    @default(now())
   description   String      @default("")
+  imageUrl      String?
   scheduledAt   String?
   sections      Section[]
 }
