@@ -29,7 +29,7 @@ export class StoriesController {
 
   @Post('/generate')
   generateStory() {
-    //return this.storiesService.generateAndSaveStory();
+    return this.storiesService.generateAndSaveStory();
   }
 
   @Get('/by-date')
@@ -51,6 +51,15 @@ export class StoriesController {
   async getAllAvailable() {
     try {
       return await this.storiesService.getAllAvailableStories();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Post('/generate-image')
+  async generateImage() {
+    try {
+      return await this.storiesService.generateImageForStory();
     } catch (error) {
       throw new BadRequestException(error.message);
     }

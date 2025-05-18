@@ -119,9 +119,15 @@ export class StoriesService {
   async generateAndSaveStory() {
     const storyData = await this.aiService.generateStory();
 
+    const storyImageUrl = await this.aiService.generateCoverImageForStory(
+      storyData.title,
+    );
+
     const story = await this.prisma.story.create({
       data: {
         title: storyData.title,
+        imageUrl: storyImageUrl,
+        description: storyData.description,
       },
     });
 
@@ -154,5 +160,11 @@ export class StoriesService {
       },
     });
     return availableStories || [];
+  }
+
+  async generateImageForStory() {
+    await this.aiService.generateCoverImageForStory(
+      'Das Abenteuer der kleinen Eule Ella',
+    );
   }
 }
