@@ -112,8 +112,32 @@ export class StoriesService {
       },
     });
 
-    return existingStory ?? null;
-    // todo: If no story exists, we could create one without images just to be fancy
+    if (existingStory) {
+      return existingStory;
+    } else if (!existingStory && formattedDate === formatDate(today)) {
+      const unscheduled = await this.prisma.story.findFirst({
+        where: {
+          scheduledAt: null,
+        },
+        orderBy: { createdAt: 'asc' },
+        include: {
+          sections: {
+            orderBy: { order: 'asc' },
+          },
+        },
+      });
+
+      if (!unscheduled) return null;
+
+      await this.assignScheduledDate(unscheduled.id, formattedDate);
+
+      return {
+        ...unscheduled,
+        scheduledAt: formattedDate,
+      };
+    }
+    // todo: fallback if anything above did not work
+    return null;
   }
 
   async generateAndSaveStory() {
