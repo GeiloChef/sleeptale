@@ -1,22 +1,30 @@
 <template>
- <div class="h-full flex flex-col gap-16 justify-center items-center">
-   <span class="text-2xl">
-     {{ $t('story-of-today') }}
-   </span>
+ <div class="h-full flex flex-col gap-8 justify-center items-center">
+   <div class="flex flex-col gap-2 text-center">
+     <span class="text-xl">
+       {{ $t('story-of-the-day') }}
+     </span>
 
-   <div>
+     <span class="italic">
+       - {{ getDateForStory }} -
+     </span>
+   </div>
+
+   <div class="rounded-2xl overflow-hidden">
      <Image
          v-if="selectedStory.imageUrl"
          :src="imageUrl(selectedStory.imageUrl)" />
    </div>
 
-   <span class="text-4xl text-center">
-     {{ selectedStory.title }}
-   </span>
+   <div class="flex flex-col gap-4">
+     <span class="text-4xl text-center">
+       {{ selectedStory.title }}
+     </span>
 
-   <span class="text-2xl text-center">
-     {{ selectedStory.description }}
-   </span>
+     <span class="text-xl text-center">
+       {{ selectedStory.description }}
+     </span>
+   </div>
 
    <div>
      <Button @click="goToTodayStory">
@@ -40,6 +48,14 @@ const router = useRouter();
 const goToTodayStory = () => {
   navigateToStoryPage(moment().format(MomentFormat.DateUrl));
 }
+
+const getDateForStory = computed(() => {
+  if (selectedStory.value.scheduledAt) {
+    return moment(selectedStory.value.scheduledAt).format(MomentFormat.DateDisplay)
+  }
+
+  return '';
+});
 
 onMounted(async (): Promise<void> => {
   await storyStore.fetchStoryByDate(moment());
