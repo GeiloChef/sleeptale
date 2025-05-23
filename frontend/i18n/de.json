@@ -1,9 +1,11 @@
 {
-  "test": "Testing...",
-  "read-book": "Story lesen",
-  "previous-page": "Vorherige Seite",
-  "next-page": "Nächste Seite",
+  "all-stories": "Alle Geschichten",
   "end-story": "Story beenden",
+  "next-page": "Nächste Seite",
+  "previous-page": "Vorherige Seite",
+  "read-book": "Story lesen",
+  "read-now": "Jetzt lesen",
+  "story-for-today": "Heutige Geschichte",
   "story-of-the-day": "Geschichte des Tages",
-  "all-stories": "Alle Geschichten"
+  "test": "Testing..."
 }
