@@ -60,7 +60,10 @@ export default defineNuxtConfig({
         'trash',
         'bars',
         'bars-staggered',
-        'book-open'
+        'book-open',
+        'font',
+        'plus',
+        'minus'
       ],
     },
     component: 'Icon',
