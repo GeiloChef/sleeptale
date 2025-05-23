@@ -4,6 +4,10 @@
       <span class="text-2xl">
         {{ story.title }}
       </span>
+
+      <span class="text-sm">
+        {{ story.description }}
+      </span>
       <span class="italic">
         {{ moment(story.scheduledAt).format(MomentFormat.DateDisplay) }}
       </span>
