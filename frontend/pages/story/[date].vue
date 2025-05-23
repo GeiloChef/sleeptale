@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col w-full">
+  <div class="flex flex-col flex-grow w-full min-h-0">
     <div
         v-if="!isInReadMode"
         class="h-full flex flex-col gap-16 justify-center items-center">
@@ -26,7 +26,7 @@
 
     <div
         v-else
-        class="h-full flex flex-col gap-8">
+        class="flex flex-grow flex-col gap-8 min-h-0">
       <div class="text-2xl text-center flex h-full justify-center items-center">
         {{ currentSection.text }}
       </div>
