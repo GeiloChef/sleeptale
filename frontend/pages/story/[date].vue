@@ -27,11 +27,16 @@
     <div
         v-else
         class="flex flex-grow flex-col gap-8 min-h-0">
-      <div class="text-2xl text-center flex h-full justify-center items-center">
+
+      <StorySettingsBar class="h-6" />
+
+      <div
+          class="text-center flex flex-1 justify-center items-center overflow-y-auto"
+          :style="{fontSize: `${applicationStore.fontSize}px`}">
         {{ currentSection.text }}
       </div>
 
-      <div class="flex flex-row justify-between items-center w-full">
+      <div class="flex flex-row justify-between items-center w-full h-8">
         <Button
             :disabled="isFirstSection"
             @click="previousPage">
@@ -59,6 +64,7 @@ import {useRoute} from "nuxt/app";
 import {MomentFormat} from "@/types/Core.Types";
 import type {Section} from "@/types/Story.types";
 import {imageUrl} from "@/utils/Image.Utils";
+import StorySettingsBar from "@/components/StorySettingsBar.vue";
 
 const route = useRoute();
 
@@ -66,6 +72,8 @@ const { t } = useI18n();
 
 const storyStore = useStoryStore();
 const { selectedStory } = storeToRefs(storyStore);
+
+const applicationStore = useApplicationStore();
 
 const isInReadMode = ref(true);
 
@@ -116,8 +124,6 @@ const nextPageLabel = computed((): string => {
 });
 
 onMounted(async (): Promise<void> => {
-  endStory();
-
   if (route.params.date) {
     await storyStore.fetchStoryByDate(moment(route.params.date, MomentFormat.DateUrl));
   }
