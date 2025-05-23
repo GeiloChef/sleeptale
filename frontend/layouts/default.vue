@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container min-h-screen flex flex-col">
+  <div class="app-container h-screen flex flex-col">
     <header class="header">
       <AppHeader />
     </header>
