@@ -28,7 +28,8 @@
         v-else
         class="flex flex-grow flex-col gap-8 min-h-0">
 
-      <StorySettingsBar class="h-6" />
+      <StorySettingsBar @getTextToSpeechForSection="onGetTextToSpeechForSection" class="h-6" />
+      <audio ref="AudioPlayer_Ref" style="display: none" />
 
       <div
           class="text-center flex flex-1 justify-center items-center overflow-y-auto"
@@ -65,6 +66,7 @@ import {MomentFormat} from "@/types/Core.Types";
 import type {Section} from "@/types/Story.types";
 import {imageUrl} from "@/utils/Image.Utils";
 import StorySettingsBar from "@/components/StorySettingsBar.vue";
+import {audioUrl} from "@/utils/Audio.Utils";
 
 const route = useRoute();
 
@@ -122,6 +124,17 @@ const isLastSection = computed((): boolean => {
 const nextPageLabel = computed((): string => {
   return isLastSection.value ? t('end-story') : t('next-page')
 });
+
+const AudioPlayer_Ref = ref<HTMLAudioElement>();
+const onGetTextToSpeechForSection = async (): Promise<void> => {
+  const textToSpeechUrl = await storyStore.fetchTextToSpeechForStory(selectedStory.value.id, currentSection.value.id);
+  if (AudioPlayer_Ref.value) {
+    AudioPlayer_Ref.value.src = audioUrl(textToSpeechUrl);
+    await AudioPlayer_Ref.value.play();
+  }
+}
+
+
 
 onMounted(async (): Promise<void> => {
   if (route.params.date) {

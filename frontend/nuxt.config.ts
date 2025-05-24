@@ -63,7 +63,8 @@ export default defineNuxtConfig({
         'book-open',
         'font',
         'plus',
-        'minus'
+        'minus',
+        'volume-high'
       ],
     },
     component: 'Icon',

@@ -4,6 +4,8 @@
       <DecreaseFontSizeIcon @click="applicationStore.decreaseFontSize" />
       <IncreaseFontSizeIcon @click="applicationStore.increaseFontSize" />
     </div>
+
+    <Icon icon="volume-high" @click="emit('getTextToSpeechForSection')" />
   </div>
 </template>
 
@@ -12,5 +14,7 @@ import IncreaseFontSizeIcon from "@/components/icons/IncreaseFontSizeIcon.vue";
 import DecreaseFontSizeIcon from "@/components/icons/DecreaseFontSizeIcon.vue";
 import { useApplicationStore } from "@/stores/Application.Store";
 
-const applicationStore = useApplicationStore();
+const applicationStore = useApplicationStore()
+
+const emit = defineEmits(['getTextToSpeechForSection'])
 </script>

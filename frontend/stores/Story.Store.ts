@@ -7,7 +7,7 @@ import type {Moment} from "moment";
 import {MomentFormat} from "@/types/Core.Types";
 
 export const useStoryStore = defineStore('storyStore', () => {
-  const { getToday, getStoryByDate, getAllAvailableStories } = useStories();
+  const { getStoryByDate, getAllAvailableStories, getTextToSpeechForSection } = useStories();
   const selectedStory = ref<StoryWithSections>(createDefaultStory());
   const allAvailableStories = ref<StoryWithoutSections[]>([]);
 
@@ -21,11 +21,18 @@ export const useStoryStore = defineStore('storyStore', () => {
     allAvailableStories.value = fetchedStory;
   }
 
+  const fetchTextToSpeechForStory = async (storyId: number, sectionId: number): Promise<string> => {
+    const fetchedAudio = await getTextToSpeechForSection(storyId, sectionId)
+
+    return fetchedAudio;
+  }
+
   return {
     selectedStory,
     allAvailableStories,
     fetchStoryByDate,
-    fetchAllStories
+    fetchAllStories,
+    fetchTextToSpeechForStory
   }
 }, {
   persist: {

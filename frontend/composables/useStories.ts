@@ -3,12 +3,6 @@ import {mapStoryApiToDomainWithSections} from "@/utils/mappers/Story.Mapper";
 
 export const useStories = () => {
   const apiBase = useRuntimeConfig().public.apiBase || 'http://localhost:4000';
-  const getToday = async (): Promise<StoryWithSections> => {
-    const { data, error } = await useFetch(`${apiBase}/stories/today`);
-    if (error.value) throw error.value
-    return mapStoryApiToDomainWithSections(data.value as StoryWithSections);
-  }
-
   const getStoryByDate = async (date: string): Promise<StoryWithSections> => {
     const { data, error } = await useFetch(`${apiBase}/stories/by-date?date=${date}`);
     if (error.value) throw error.value
@@ -27,5 +21,13 @@ export const useStories = () => {
     return data.value
   }
 
-  return { getToday, getByDate, getStoryByDate, getAllAvailableStories }
+  const getTextToSpeechForSection = async (storyId: number, sectionId: number): Promise<string> => {
+    const { data, error } = await useFetch(`${apiBase}/tts/de/${storyId}/${sectionId}`, {
+      method: 'POST'
+    })
+    if (error.value) throw error.value
+    return data.value.url as string
+  }
+
+  return { getByDate, getStoryByDate, getAllAvailableStories, getTextToSpeechForSection }
 }
