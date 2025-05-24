@@ -1,46 +1,46 @@
-name: Release Build FTP
-on:
-  workflow_dispatch:
+name: Deploy Backend to Server
 
-permissions:
-  contents: write
+on:
+  push:
+    branches:
+      - main  # or your deployment branch
 
 jobs:
-  publish:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
-    steps:     
-      - name: Deploy via SSH
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./backend
+
+      - name: Build backend
+        run: npm run start:prod
+
+      - name: Upload backend via FTP
+        uses: sebastianpopp/ftp-action@v1.1.0
+        with:
+          host: ${{ secrets.FTP_HOST }}
+          user: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          localDir: /backend/dist
+          remoteDir: /home/deploy/sleeptale/backend
+
+      - name: Restart backend on server via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.VPS_HOST }}
+          host: ${{ secrets.VPS_HOST  }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
           script: |
-            # Load nvm and use Node.js 20
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm use 20
-          
-            # Add GitHub's SSH key to known hosts
-            mkdir -p ~/.ssh
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
-            
-            # Set git to accept the directory as safe
-            git config --global --add safe.directory /home/deploy/sleeptale
-
-            # Navigate to the project folder
-            cd /home/deploy/sleeptale
-            
-            # Ensure we have the correct permissions for the repo
-            chown -R deploy:deploy /home/deploy/sleeptale
-
-            # Pull the latest changes
-            git pull origin master
-
-            # Build and restart the backend
-            cd backend
-            npm ci
-            npm run build
-            pm2 reload sleeptale-backend || pm2 start dist/main.js --name sleeptale-backend
+            cd /home/deploy/sleeptale/backend
+            pm2 start dist/main.js
