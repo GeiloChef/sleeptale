@@ -3,6 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AiService } from '../ai/ai.service';
 import { formatDate } from '../common/utils/date.utils';
+import {
+  storyWithoutSectionsDtoMaker,
+  storyWithSectionsDtoMaker,
+} from './dto/story.dto';
 
 @Injectable()
 export class StoriesService {
@@ -10,32 +14,6 @@ export class StoriesService {
     private prisma: PrismaService,
     private aiService: AiService,
   ) {}
-
-  async create(title: string, content: string) {
-    return this.prisma.story.create({
-      data: {
-        title,
-        sections: {
-          create: [{ text: 'test2', order: 1 }],
-        },
-      },
-    });
-  }
-
-  async createTest() {
-    return this.prisma.story.create({
-      data: {
-        title: 'Gute Nacht, Emely',
-        sections: {
-          create: [
-            { text: 'Es war einmal eine kleine Schildkröte...', order: 1 },
-            { text: 'Sie lebte in einem funkelnden Teich...', order: 2 },
-          ],
-        },
-      },
-      include: { sections: true },
-    });
-  }
 
   async findAll() {
     return this.prisma.story.findMany();
@@ -51,6 +29,7 @@ export class StoriesService {
   async findStoryByDate(date: Date) {
     const inputDate = new Date(date);
     const today = new Date();
+    const language = 'de';
 
     if (inputDate > today) {
       throw new Error('Nur Daten bis einschließlich heute sind erlaubt.');
@@ -66,11 +45,15 @@ export class StoriesService {
         sections: {
           orderBy: { order: 'asc' },
         },
+        details: {
+          where: { language: language }, // or pass from query/context
+          take: 1,
+        },
       },
     });
 
     if (existingStory) {
-      return existingStory;
+      return storyWithSectionsDtoMaker(existingStory, language);
     } else if (!existingStory && formattedDate === formatDate(today)) {
       const unscheduled = await this.prisma.story.findFirst({
         where: {
@@ -81,6 +64,7 @@ export class StoriesService {
           sections: {
             orderBy: { order: 'asc' },
           },
+          details: {},
         },
       });
 
@@ -88,10 +72,12 @@ export class StoriesService {
 
       await this.assignScheduledDate(unscheduled.id, formattedDate);
 
-      return {
+      const newlyScheduledStore = {
         ...unscheduled,
         scheduledAt: formattedDate,
       };
+
+      return storyWithSectionsDtoMaker(newlyScheduledStore, language);
     }
     // todo: fallback if anything above did not work
     return null;
@@ -106,8 +92,15 @@ export class StoriesService {
 
     const story = await this.prisma.story.create({
       data: {
-        title: storyData.title,
         imageUrl: storyImageUrl,
+      },
+    });
+
+    await this.prisma.storyTranslation.create({
+      data: {
+        storyId: story.id,
+        language: 'de',
+        title: storyData.title,
         description: storyData.description,
       },
     });
@@ -118,6 +111,7 @@ export class StoriesService {
           data: {
             text,
             order: index,
+            language: 'de',
             storyId: story.id,
           },
         }),
@@ -132,6 +126,7 @@ export class StoriesService {
 
   async getAllAvailableStories() {
     const formattedDate = formatDate(new Date());
+    const language = 'de';
 
     const availableStories = await this.prisma.story.findMany({
       where: {
@@ -139,8 +134,18 @@ export class StoriesService {
           lte: formattedDate,
         },
       },
+      include: {
+        details: {
+          where: { language: language }, // or pass from query/context
+          take: 1,
+        },
+      },
     });
-    return availableStories || [];
+    return (
+      availableStories.map((story) =>
+        storyWithoutSectionsDtoMaker(story, language),
+      ) || []
+    );
   }
 
   async generateImageForStory() {

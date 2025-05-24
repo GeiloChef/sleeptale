@@ -9,12 +9,20 @@ datasource db {
 
 model Story {
   id            Int         @id @default(autoincrement())
-  title         String
   createdAt     DateTime    @default(now())
-  description   String      @default("")
   imageUrl      String?
   scheduledAt   String?
+  details       StoryTranslation[]
   sections      Section[]
+}
+
+model StoryTranslation {
+  id          Int     @id @default(autoincrement())
+  storyId     Int
+  story       Story   @relation(fields: [storyId], references: [id])
+  language    String  @default("de")
+  title       String
+  description String
 }
 
 model Section {
@@ -23,5 +31,6 @@ model Section {
   imageUrl  String?
   order     Int
   storyId   Int
+  language  String   @default("de")
   story     Story    @relation(fields: [storyId], references: [id])
 }

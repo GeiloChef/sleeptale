@@ -12,19 +12,9 @@ import { StoriesService } from './stories.service';
 export class StoriesController {
   constructor(private readonly storiesService: StoriesService) {}
 
-  @Post()
-  create(@Body('title') title: string, @Body('content') content: string) {
-    return this.storiesService.create(title, content);
-  }
-
   @Get()
   findAll() {
     return this.storiesService.findAll();
-  }
-
-  @Post('/test')
-  createTest() {
-    return this.storiesService.createTest();
   }
 
   @Post('/generate')
