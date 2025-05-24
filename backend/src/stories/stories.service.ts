@@ -136,7 +136,7 @@ export class StoriesService {
       },
       include: {
         details: {
-          where: { language: language }, // or pass from query/context
+          where: { language: language },
           take: 1,
         },
       },

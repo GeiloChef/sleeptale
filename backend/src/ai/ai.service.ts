@@ -59,7 +59,6 @@ export class AiService {
 
     const imageUrl = imageResponse.data[0]?.url;
 
-    console.log(imageUrl);
     if (!imageUrl) throw new Error('Kein Bild-URL von OpenAI erhalten');
 
     const localImagePath =
