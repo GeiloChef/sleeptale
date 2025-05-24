@@ -17,7 +17,7 @@ export class GoogleTtsController {
   async synthesizeFromStorySection(
     @Param('storyId') storyId: string,
     @Param('sectionId') sectionId: string,
-    @Query('language') languageCode: string = 'en',
+    @Param('language') languageCode: string,
   ): Promise<{ url: string }> {
     const filePath = await this.googleTtsService.generateTextToSpeechForSection(
       storyId,
