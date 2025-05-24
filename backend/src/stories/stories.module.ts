@@ -9,5 +9,6 @@ import { ImageModule } from '../image/image.module';
   imports: [PrismaModule, ImageModule],
   providers: [StoriesService, AiService],
   controllers: [StoriesController],
+  exports: [StoriesService],
 })
 export class StoriesModule {}

@@ -48,49 +48,6 @@ export class StoriesService {
     });
   }
 
-  /*  async getStoryForToday() {
-    const today = new Date();
-    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
-    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-
-    const todayStory = await this.prisma.story.findFirst({
-      where: {
-        scheduledAt: {
-          gte: startOfDay,
-          lte: endOfDay,
-        },
-      },
-      include: {
-        sections: {
-          orderBy: { order: 'asc' },
-        },
-      },
-    });
-
-    if (todayStory) return todayStory;
-
-    const unscheduled = await this.prisma.story.findFirst({
-      where: {
-        scheduledAt: null,
-      },
-      orderBy: { createdAt: 'asc' },
-      include: {
-        sections: {
-          orderBy: { order: 'asc' },
-        },
-      },
-    });
-
-    if (!unscheduled) return null;
-
-    await this.assignScheduledDate(unscheduled.id, startOfDay);
-
-    return {
-      ...unscheduled,
-      scheduledAt: startOfDay,
-    };
-  }*/
-
   async findStoryByDate(date: Date) {
     const inputDate = new Date(date);
     const today = new Date();
@@ -190,5 +147,21 @@ export class StoriesService {
     await this.aiService.generateCoverImageForStory(
       'Das Abenteuer der kleinen Eule Ella',
     );
+  }
+
+  async findSectionTextById(
+    storyId: string | number,
+    sectionId: string | number,
+  ): Promise<string> {
+    const section = await this.prisma.section.findFirst({
+      where: {
+        id: Number(sectionId),
+        storyId: Number(storyId),
+      },
+    });
+
+    if (!section) throw new Error('Keine Section gefunden!');
+
+    return section.text;
   }
 }

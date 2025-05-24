@@ -8,6 +8,7 @@ async function bootstrap() {
   app.enableCors();
 
   app.use('/images', express.static(join(__dirname, '..', 'public', 'images')));
+  app.use('/audio', express.static(join(__dirname, '..', 'public', 'audio')));
 
   await app.listen(4000, '0.0.0.0');
 }

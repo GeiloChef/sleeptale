@@ -5,5 +5,6 @@ import { ImageModule } from '../image/image.module';
 @Module({
   imports: [ImageModule],
   providers: [AiService],
+  exports: [AiService],
 })
 export class AiModule {}
