@@ -1,6 +1,7 @@
 // src/google-tts/google-tts.controller.ts
-import { Body, Controller, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Headers, Param, Post, Query } from '@nestjs/common';
 import { GoogleTtsService } from './google-tts.service';
+import { getLanguageFromHeader } from '../common/utils/language.utils';
 
 @Controller('tts')
 export class GoogleTtsController {
@@ -17,12 +18,14 @@ export class GoogleTtsController {
   async synthesizeFromStorySection(
     @Param('storyId') storyId: string,
     @Param('sectionId') sectionId: string,
-    @Param('language') languageCode: string,
+    @Headers('accept-language') acceptLanguage?: string,
   ): Promise<{ url: string }> {
+    const language = getLanguageFromHeader(acceptLanguage);
+
     const filePath = await this.googleTtsService.generateTextToSpeechForSection(
       storyId,
       sectionId,
-      languageCode,
+      language,
     );
     return { url: filePath };
   }

@@ -7,12 +7,14 @@ import {
   storyWithoutSectionsDtoMaker,
   storyWithSectionsDtoMaker,
 } from './dto/story.dto';
+import { TranslationService } from '../translation/translation.service';
 
 @Injectable()
 export class StoriesService {
   constructor(
     private prisma: PrismaService,
     private aiService: AiService,
+    private translationService: TranslationService,
   ) {}
 
   async findAll() {
@@ -26,10 +28,119 @@ export class StoriesService {
     });
   }
 
-  async findStoryByDate(date: Date) {
+  hasRequiredTranslation(story, language) {
+    const requestedTranslation = story.details.find(
+      (t) => t.language === language,
+    );
+
+    const requestedSections = story.sections.filter(
+      (s) => s.language === language,
+    );
+
+    return requestedTranslation !== null && requestedSections.length;
+  }
+
+  async prepareStoryForFrontend(story, language) {
+    const translatedStory = await this.translateStory(story, language);
+
+    return storyWithSectionsDtoMaker(translatedStory, language);
+  }
+
+  async translateStory(story, language) {
+    const fallbackLanguage = 'de';
+
+    const originalStoryDetails = story.details.find(
+      (t) => t.language === fallbackLanguage,
+    );
+
+    const translatedStoryDetails = story.details.find(
+      (t) => t.language === language,
+    );
+
+    const originalStorySections = story.sections.filter(
+      (s) => s.language === fallbackLanguage,
+    );
+    const translatedStorySections = story.sections.filter(
+      (s) => s.language === language,
+    );
+
+    if (translatedStoryDetails && translatedStorySections) {
+      console.log('found translated story');
+      return story;
+    }
+
+    if (!translatedStoryDetails) {
+      const translatedTitle = await this.translationService.translateText(
+        originalStoryDetails.title,
+        fallbackLanguage,
+        language,
+      );
+
+      const translatedDescription = await this.translationService.translateText(
+        originalStoryDetails.description,
+        fallbackLanguage,
+        language,
+      );
+
+      await this.prisma.storyTranslation.create({
+        data: {
+          storyId: story.id,
+          language: language,
+          title: translatedTitle,
+          description: translatedDescription,
+        },
+      });
+
+      if (!translatedStorySections.length) {
+        await Promise.all(
+          originalStorySections.map(async (section) => {
+            const translatedText = await this.translationService.translateText(
+              section.text,
+              fallbackLanguage,
+              language,
+            );
+
+            return this.prisma.section.create({
+              data: {
+                storyId: story.id,
+                language: language,
+                text: translatedText,
+                order: section.order,
+                imageUrl: section.imageUrl,
+              },
+            });
+          }),
+        );
+      }
+
+      return this.findStoryById(story.id, language);
+    }
+  }
+
+  async findStoryById(storyId: number, language: string) {
+    return await this.prisma.story.findFirst({
+      where: {
+        id: storyId,
+      },
+      include: {
+        sections: {
+          where: {
+            language: { in: [language, 'de'] },
+          },
+          orderBy: { order: 'asc' },
+        },
+        details: {
+          where: {
+            language: { in: [language, 'de'] },
+          },
+        },
+      },
+    });
+  }
+
+  async findStoryByDate(date: Date, language: string) {
     const inputDate = new Date(date);
     const today = new Date();
-    const language = 'de';
 
     if (inputDate > today) {
       throw new Error('Nur Daten bis einschließlich heute sind erlaubt.');
@@ -43,17 +154,21 @@ export class StoriesService {
       },
       include: {
         sections: {
+          where: {
+            language: { in: [language, 'de'] },
+          },
           orderBy: { order: 'asc' },
         },
         details: {
-          where: { language: language }, // or pass from query/context
-          take: 1,
+          where: {
+            language: { in: [language, 'de'] },
+          },
         },
       },
     });
 
     if (existingStory) {
-      return storyWithSectionsDtoMaker(existingStory, language);
+      return this.prepareStoryForFrontend(existingStory, language);
     } else if (!existingStory && formattedDate === formatDate(today)) {
       const unscheduled = await this.prisma.story.findFirst({
         where: {
@@ -64,7 +179,9 @@ export class StoriesService {
           sections: {
             orderBy: { order: 'asc' },
           },
-          details: {},
+          details: {
+            where: { language: language },
+          },
         },
       });
 
@@ -77,7 +194,7 @@ export class StoriesService {
         scheduledAt: formattedDate,
       };
 
-      return storyWithSectionsDtoMaker(newlyScheduledStore, language);
+      return this.prepareStoryForFrontend(newlyScheduledStore, language);
     }
     // todo: fallback if anything above did not work
     return null;
@@ -141,6 +258,7 @@ export class StoriesService {
         },
       },
     });
+
     return (
       availableStories.map((story) =>
         storyWithoutSectionsDtoMaker(story, language),

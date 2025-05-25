@@ -11,6 +11,7 @@ import { GoogleTtsService } from './google-tts/google-tts.service';
 import { GoogleTtsController } from './google-tts/google-tts.controller';
 import { GoogleTtsModule } from './google-tts/google-tts.module';
 import { StoriesService } from './stories/stories.service';
+import { TranslationModule } from './translation/translation.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { StoriesService } from './stories/stories.service';
     ConfigModule.forRoot({ isGlobal: true }),
     ImageModule,
     GoogleTtsModule,
+    TranslationModule,
   ],
   controllers: [AppController, GoogleTtsController],
   providers: [AppService, ImageService, GoogleTtsService, StoriesService],
