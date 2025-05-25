@@ -4,7 +4,7 @@ import * as textToSpeech from '@google-cloud/text-to-speech';
 import * as fs from 'fs';
 import * as util from 'util';
 import { join } from 'path';
-import { StoriesService } from '../stories/stories.service';
+import { StoryService } from '../story/story.service';
 
 export interface GoogleTtsVoiceSettings {
   languageCode: string;
@@ -31,7 +31,7 @@ export class GoogleTtsService {
   private client: textToSpeech.TextToSpeechClient;
   private logger = new Logger(GoogleTtsService.name);
 
-  constructor(private readonly storiesService: StoriesService) {
+  constructor(private readonly storiesService: StoryService) {
     this.client = new textToSpeech.TextToSpeechClient({
       keyFilename: join(process.cwd(), 'src', 'config', 'google-tts-key.json'),
     });

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { GoogleTtsService } from './google-tts.service';
 import { GoogleTtsController } from './google-tts.controller';
-import { StoriesModule } from '../stories/stories.module';
+import { StoryModule } from '../story/story.module';
 
 @Module({
-  imports: [StoriesModule],
+  imports: [StoryModule],
   providers: [GoogleTtsService],
   controllers: [GoogleTtsController],
 })

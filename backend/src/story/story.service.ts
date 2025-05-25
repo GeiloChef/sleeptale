@@ -1,4 +1,4 @@
-// src/stories/stories.service.ts
+// src/story/story.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AiService } from '../ai/ai.service';
@@ -10,7 +10,7 @@ import {
 import { TranslationService } from '../translation/translation.service';
 
 @Injectable()
-export class StoriesService {
+export class StoryService {
   constructor(
     private prisma: PrismaService,
     private aiService: AiService,

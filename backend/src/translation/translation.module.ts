@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TranslationService } from './translation.service';
-import { StoriesModule } from '../stories/stories.module';
+import { StoryModule } from '../story/story.module';
 
 @Module({
-  imports: [StoriesModule],
+  imports: [StoryModule],
   providers: [TranslationService],
   exports: [TranslationService],
 })

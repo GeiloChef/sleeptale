@@ -2,17 +2,16 @@ import {
   Controller,
   Post,
   Get,
-  Body,
   Query,
   BadRequestException,
   Headers,
 } from '@nestjs/common';
-import { StoriesService } from './stories.service';
+import { StoryService } from './story.service';
 import { getLanguageFromHeader } from '../common/utils/language.utils';
 
 @Controller('stories')
-export class StoriesController {
-  constructor(private readonly storiesService: StoriesService) {}
+export class StoryController {
+  constructor(private readonly storiesService: StoryService) {}
 
   @Get()
   findAll() {

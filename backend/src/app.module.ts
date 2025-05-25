@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { StoriesModule } from './stories/stories.module';
+import { StoryModule } from './story/story.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AiModule } from './ai/ai.module';
 import { ConfigModule } from '@nestjs/config';
@@ -10,7 +10,7 @@ import { ImageModule } from './image/image.module';
 import { GoogleTtsService } from './google-tts/google-tts.service';
 import { GoogleTtsController } from './google-tts/google-tts.controller';
 import { GoogleTtsModule } from './google-tts/google-tts.module';
-import { StoriesService } from './stories/stories.service';
+import { StoryService } from './story/story.service';
 import { TranslationModule } from './translation/translation.module';
 
 @Module({
@@ -20,7 +20,7 @@ import { TranslationModule } from './translation/translation.module';
       envFilePath: `.env.${process.env.NODE_ENV}` || '.env',
     }),
     PrismaModule,
-    StoriesModule,
+    StoryModule,
     AiModule,
     ConfigModule.forRoot({ isGlobal: true }),
     ImageModule,
@@ -28,6 +28,6 @@ import { TranslationModule } from './translation/translation.module';
     TranslationModule,
   ],
   controllers: [AppController, GoogleTtsController],
-  providers: [AppService, ImageService, GoogleTtsService, StoriesService],
+  providers: [AppService, ImageService, GoogleTtsService, StoryService],
 })
 export class AppModule {}
