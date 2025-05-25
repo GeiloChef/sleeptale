@@ -35,7 +35,7 @@ export function storyWithSectionsDtoMaker(
 }
 
 export function storyWithoutSectionsDtoMaker(
-  story: Story & { details: StoryTranslation[] },
+  story: Story & { details: StoryTranslation[]; sections?: Section[] },
   lang: string,
 ): StoryWithoutSectionsDto {
   const translation =

@@ -28,25 +28,13 @@ export class StoryService {
     });
   }
 
-  hasRequiredTranslation(story, language) {
-    const requestedTranslation = story.details.find(
-      (t) => t.language === language,
-    );
-
-    const requestedSections = story.sections.filter(
-      (s) => s.language === language,
-    );
-
-    return requestedTranslation !== null && requestedSections.length;
-  }
-
   async prepareStoryForFrontend(story, language) {
     const translatedStory = await this.translateStory(story, language);
 
     return storyWithSectionsDtoMaker(translatedStory, language);
   }
 
-  async translateStory(story, language) {
+  async translateStory(story, language, generateSections = true) {
     const fallbackLanguage = 'de';
 
     const originalStoryDetails = story.details.find(
@@ -57,12 +45,17 @@ export class StoryService {
       (t) => t.language === language,
     );
 
-    const originalStorySections = story.sections.filter(
-      (s) => s.language === fallbackLanguage,
-    );
-    const translatedStorySections = story.sections.filter(
-      (s) => s.language === language,
-    );
+    let originalStorySections = [];
+    let translatedStorySections = [];
+
+    if (generateSections) {
+      originalStorySections = story.sections.filter(
+        (s) => s.language === fallbackLanguage,
+      );
+      translatedStorySections = story.sections.filter(
+        (s) => s.language === language,
+      );
+    }
 
     if (translatedStoryDetails && translatedStorySections) {
       console.log('found translated story');
@@ -91,7 +84,7 @@ export class StoryService {
         },
       });
 
-      if (!translatedStorySections.length) {
+      if (!translatedStorySections.length && generateSections) {
         await Promise.all(
           originalStorySections.map(async (section) => {
             const translatedText = await this.translationService.translateText(
@@ -241,11 +234,10 @@ export class StoryService {
     });
   }
 
-  async getAllAvailableStories() {
+  async getAllAvailableStories(language: string) {
     const formattedDate = formatDate(new Date());
-    const language = 'de';
 
-    const availableStories = await this.prisma.story.findMany({
+    let availableStories = await this.prisma.story.findMany({
       where: {
         scheduledAt: {
           lte: formattedDate,
@@ -253,16 +245,24 @@ export class StoryService {
       },
       include: {
         details: {
-          where: { language: language },
-          take: 1,
+          where: {
+            language: { in: [language, 'de'] },
+          },
         },
       },
     });
 
-    return (
-      availableStories.map((story) =>
-        storyWithoutSectionsDtoMaker(story, language),
-      ) || []
+    availableStories = availableStories.filter((story) => story.details.length);
+
+    return await Promise.all(
+      availableStories.map(async (story) => {
+        const translatedStory = await this.translateStory(
+          story,
+          language,
+          false,
+        );
+        return storyWithoutSectionsDtoMaker(translatedStory, language);
+      }),
     );
   }
 

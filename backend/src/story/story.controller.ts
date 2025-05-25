@@ -47,7 +47,7 @@ export class StoryController {
     try {
       const language = getLanguageFromHeader(acceptLanguage);
 
-      return await this.storiesService.getAllAvailableStories();
+      return await this.storiesService.getAllAvailableStories(language);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
