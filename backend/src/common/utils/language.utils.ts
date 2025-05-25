@@ -1,3 +1,5 @@
+import {FALLBACK_LANGUAGE} from "../../story/types/story.types";
+
 export function getLanguageFromHeader(
   headerValue?: string,
   fallback = FALLBACK_LANGUAGE,
