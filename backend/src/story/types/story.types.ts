@@ -1,1 +1,1 @@
-const FALLBACK_LANGUAGE = 'de';
+export const FALLBACK_LANGUAGE = 'de';
