@@ -13,11 +13,6 @@ import { getLanguageFromHeader } from '../common/utils/language.utils';
 export class StoryController {
   constructor(private readonly storiesService: StoryService) {}
 
-  @Get()
-  findAll() {
-    return this.storiesService.findAll();
-  }
-
   @Post('/generate')
   generateStory() {
     return this.storiesService.generateAndSaveStory();

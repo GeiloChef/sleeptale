@@ -4,10 +4,12 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AiService } from '../ai/ai.service';
 import { formatDate } from '../common/utils/date.utils';
 import {
+  StoryWithoutSectionsDto,
   storyWithoutSectionsDtoMaker,
   storyWithSectionsDtoMaker,
 } from './dto/story.dto';
 import { TranslationService } from '../translation/translation.service';
+import { Section, Story, StoryTranslation } from '@prisma/client';
 
 @Injectable()
 export class StoryService {
@@ -17,25 +19,29 @@ export class StoryService {
     private translationService: TranslationService,
   ) {}
 
-  async findAll() {
-    return this.prisma.story.findMany();
-  }
-
-  async assignScheduledDate(storyId: number, date: string) {
+  /**
+   * @description Assigns a given date to a story to schedule it on a certain date.
+   * @param storyId
+   * @param date
+   */
+  async assignScheduledDate(storyId: number, date: string): Promise<void> {
     return this.prisma.story.update({
       where: { id: storyId },
       data: { scheduledAt: date },
     });
   }
 
-  async prepareStoryForFrontend(story, language) {
+  async prepareStoryForFrontend(
+    story: Story & { details: StoryTranslation[]; sections?: Section[] },
+    language: string,
+  ): Promise<StoryWithoutSectionsDto> {
     const translatedStory = await this.translateStory(story, language);
 
     return storyWithSectionsDtoMaker(translatedStory, language);
   }
 
   async translateStory(story, language, generateSections = true) {
-    const fallbackLanguage = 'de';
+    const fallbackLanguage = FALLBACK_LANGUAGE;
 
     const originalStoryDetails = story.details.find(
       (t) => t.language === fallbackLanguage,
@@ -118,13 +124,13 @@ export class StoryService {
       include: {
         sections: {
           where: {
-            language: { in: [language, 'de'] },
+            language: { in: [language, FALLBACK_LANGUAGE] },
           },
           orderBy: { order: 'asc' },
         },
         details: {
           where: {
-            language: { in: [language, 'de'] },
+            language: { in: [language, FALLBACK_LANGUAGE] },
           },
         },
       },
@@ -148,13 +154,13 @@ export class StoryService {
       include: {
         sections: {
           where: {
-            language: { in: [language, 'de'] },
+            language: { in: [language, FALLBACK_LANGUAGE] },
           },
           orderBy: { order: 'asc' },
         },
         details: {
           where: {
-            language: { in: [language, 'de'] },
+            language: { in: [language, FALLBACK_LANGUAGE] },
           },
         },
       },
@@ -209,7 +215,7 @@ export class StoryService {
     await this.prisma.storyTranslation.create({
       data: {
         storyId: story.id,
-        language: 'de',
+        language: FALLBACK_LANGUAGE,
         title: storyData.title,
         description: storyData.description,
       },
@@ -221,7 +227,7 @@ export class StoryService {
           data: {
             text,
             order: index,
-            language: 'de',
+            language: FALLBACK_LANGUAGE,
             storyId: story.id,
           },
         }),
@@ -246,7 +252,7 @@ export class StoryService {
       include: {
         details: {
           where: {
-            language: { in: [language, 'de'] },
+            language: { in: [language, FALLBACK_LANGUAGE] },
           },
         },
       },
