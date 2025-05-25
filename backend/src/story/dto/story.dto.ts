@@ -18,7 +18,7 @@ export interface StoryWithoutSectionsDto {
 }
 
 export function storyWithSectionsDtoMaker(
-  story: Story & { details: StoryTranslation[]; sections: Section[] },
+  story: Story & { details: StoryTranslation[]; sections?: Section[] },
   lang: string,
 ): StoryWithSectionsDto {
   const translation =
@@ -30,7 +30,9 @@ export function storyWithSectionsDtoMaker(
     description: translation?.description ?? '',
     imageUrl: story.imageUrl ?? undefined,
     scheduledAt: story.scheduledAt ?? undefined,
-    sections: story.sections.filter((section) => section.language === lang),
+    sections: story.sections
+      ? story.sections.filter((section) => section.language === lang)
+      : [],
   };
 }
 

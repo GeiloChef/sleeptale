@@ -6,11 +6,12 @@ import { formatDate } from '../common/utils/date.utils';
 import {
   StoryWithoutSectionsDto,
   storyWithoutSectionsDtoMaker,
+  StoryWithSectionsDto,
   storyWithSectionsDtoMaker,
 } from './dto/story.dto';
 import { TranslationService } from '../translation/translation.service';
 import { Section, Story, StoryTranslation } from '@prisma/client';
-import {FALLBACK_LANGUAGE} from "./types/story.types";
+import { FALLBACK_LANGUAGE } from './types/story.types';
 
 @Injectable()
 export class StoryService {
@@ -32,6 +33,13 @@ export class StoryService {
     });
   }
 
+  /**
+   * @description Wrapper method that prepares a Story from the database for the frontend. What it does is, checking
+   * if the story has the needed translation, and if not, firstly create it, and then return a ready-to-use story dto with
+   * only the information in the language the user requested it.
+   * @param story
+   * @param language
+   */
   async prepareStoryForFrontend(
     story: Story & { details: StoryTranslation[]; sections?: Section[] },
     language: string,
@@ -41,7 +49,18 @@ export class StoryService {
     return storyWithSectionsDtoMaker(translatedStory, language);
   }
 
-  async translateStory(story, language, generateSections = true) {
+  /**
+   * @description Translates a given story by either checking if the required translation is already in the database, or by
+   * just creating the translations calling the DeepL api.
+   * @param story
+   * @param language
+   * @param generateSections
+   */
+  async translateStory(
+    story: Story & { details: StoryTranslation[]; sections?: Section[] },
+    language: string,
+    generateSections = true,
+  ): Promise<Story & { details: StoryTranslation[]; sections?: Section[] }> {
     const fallbackLanguage = FALLBACK_LANGUAGE;
 
     const originalStoryDetails = story.details.find(
@@ -117,7 +136,15 @@ export class StoryService {
     }
   }
 
-  async findStoryById(storyId: number, language: string) {
+  /**
+   * Find a certain story by its id. Includes all sections and details.
+   * @param storyId
+   * @param language
+   */
+  async findStoryById(
+    storyId: number,
+    language: string,
+  ): Promise<Story & { details: StoryTranslation[]; sections?: Section[] }> {
     return await this.prisma.story.findFirst({
       where: {
         id: storyId,
@@ -138,7 +165,15 @@ export class StoryService {
     });
   }
 
-  async findStoryByDate(date: Date, language: string) {
+  /**
+   * Fetch story from database by id
+   * @param date
+   * @param language
+   */
+  async findStoryByDate(
+    date: Date,
+    language: string,
+  ): Promise<StoryWithSectionsDto> {
     const inputDate = new Date(date);
     const today = new Date();
 
@@ -200,7 +235,13 @@ export class StoryService {
     return null;
   }
 
-  async generateAndSaveStory() {
+  /**
+   * Generates a new story with the given attributes ad returns
+   * @returns the newly created story
+   */
+  async generateAndSaveStory(): Promise<
+    Story & { details: StoryTranslation[]; sections?: Section[] }
+  > {
     const storyData = await this.aiService.generateStory();
 
     const storyImageUrl = await this.aiService.generateCoverImageForStory(
@@ -241,7 +282,13 @@ export class StoryService {
     });
   }
 
-  async getAllAvailableStories(language: string) {
+  /**
+   * Return all available stories with the given attributes but without sectzions
+   * @param language
+   */
+  async getAllAvailableStories(
+    language: string,
+  ): Promise<StoryWithoutSectionsDto[]> {
     const formattedDate = formatDate(new Date());
 
     let availableStories = await this.prisma.story.findMany({
@@ -273,12 +320,20 @@ export class StoryService {
     );
   }
 
-  async generateImageForStory() {
+  /**
+   * Starts the image generation for a story
+   */
+  async generateImageForStory(): Promise<void> {
     await this.aiService.generateCoverImageForStory(
       'Das Abenteuer der kleinen Eule Ella',
     );
   }
 
+  /**
+   * Find a certain section text by its section id. A language is not needed, as the section id is unique.
+   * @param storyId
+   * @param sectionId
+   */
   async findSectionTextById(
     storyId: string | number,
     sectionId: string | number,
