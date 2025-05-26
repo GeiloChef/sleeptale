@@ -92,8 +92,6 @@ export class AiService {
       genre = await this.genreService.getRandomGenreForAgeGroup(ageGroup);
     }
 
-    console.log(ageGroup);
-
     if (!genre || !genre.ageGroups.includes(ageGroup)) {
       throw new BadRequestException(
         'Invalid or unsupported genre for this age group',
