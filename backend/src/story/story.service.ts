@@ -11,7 +11,13 @@ import {
 } from './dto/story.dto';
 import { TranslationService } from '../translation/translation.service';
 import { Section, Story, StoryTranslation } from '@prisma/client';
-import { FALLBACK_LANGUAGE } from './types/story.types';
+import {
+  FALLBACK_LANGUAGE,
+  StoryAgeGroup,
+  StoryGenre,
+} from './types/story.types';
+import { TargetLanguageCode } from 'deepl-node';
+import { GenreService } from '../genre/genre.service';
 
 @Injectable()
 export class StoryService {
@@ -19,6 +25,7 @@ export class StoryService {
     private prisma: PrismaService,
     private aiService: AiService,
     private translationService: TranslationService,
+    private genreService: GenreService,
   ) {}
 
   /**
@@ -26,7 +33,7 @@ export class StoryService {
    * @param storyId
    * @param date
    */
-  async assignScheduledDate(storyId: number, date: string): Promise<void> {
+  async assignScheduledDate(storyId: number, date: string): Promise<Story> {
     return this.prisma.story.update({
       where: { id: storyId },
       data: { scheduledAt: date },
@@ -43,7 +50,7 @@ export class StoryService {
   async prepareStoryForFrontend(
     story: Story & { details: StoryTranslation[]; sections?: Section[] },
     language: string,
-  ): Promise<StoryWithoutSectionsDto> {
+  ): Promise<any> {
     const translatedStory = await this.translateStory(story, language);
 
     return storyWithSectionsDtoMaker(translatedStory, language);
@@ -92,13 +99,13 @@ export class StoryService {
       const translatedTitle = await this.translationService.translateText(
         originalStoryDetails.title,
         fallbackLanguage,
-        language,
+        language as TargetLanguageCode,
       );
 
       const translatedDescription = await this.translationService.translateText(
         originalStoryDetails.description,
         fallbackLanguage,
-        language,
+        language as TargetLanguageCode,
       );
 
       await this.prisma.storyTranslation.create({
@@ -116,7 +123,7 @@ export class StoryService {
             const translatedText = await this.translationService.translateText(
               section.text,
               fallbackLanguage,
-              language,
+              language as TargetLanguageCode,
             );
 
             return this.prisma.section.create({
@@ -239,18 +246,30 @@ export class StoryService {
    * Generates a new story with the given attributes ad returns
    * @returns the newly created story
    */
-  async generateAndSaveStory(): Promise<
-    Story & { details: StoryTranslation[]; sections?: Section[] }
-  > {
-    const storyData = await this.aiService.generateStory();
+  async generateAndSaveStory(
+    ageGroup: StoryAgeGroup,
+    genre?: StoryGenre,
+  ): Promise<any> {
+    const storyData = await this.aiService.generateStoryByAgeAndGenre(
+      ageGroup,
+      genre,
+    );
+
+    console.log(storyData);
 
     const storyImageUrl = await this.aiService.generateCoverImageForStory(
       storyData.title,
     );
 
+    const genreId = await this.genreService.getGenreIdByKey(
+      storyData.genre.key,
+    );
+
     const story = await this.prisma.story.create({
       data: {
-        imageUrl: storyImageUrl,
+        imageUrl: '', //storyImageUrl,
+        genreId: genreId,
+        ageGroup: ageGroup,
       },
     });
 
@@ -278,12 +297,12 @@ export class StoryService {
 
     return this.prisma.story.findUnique({
       where: { id: story.id },
-      include: { sections: true },
+      include: { sections: true, details: true },
     });
   }
 
   /**
-   * Return all available stories with the given attributes but without sectzions
+   * Return all available stories with the given attributes but without sections
    * @param language
    */
   async getAllAvailableStories(

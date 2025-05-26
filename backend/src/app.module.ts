@@ -12,6 +12,7 @@ import { GoogleTtsController } from './google-tts/google-tts.controller';
 import { GoogleTtsModule } from './google-tts/google-tts.module';
 import { StoryService } from './story/story.service';
 import { TranslationModule } from './translation/translation.module';
+import { GenreService } from './genre/genre.service';
 
 @Module({
   imports: [
@@ -28,6 +29,6 @@ import { TranslationModule } from './translation/translation.module';
     TranslationModule,
   ],
   controllers: [AppController, GoogleTtsController],
-  providers: [AppService, ImageService, GoogleTtsService, StoryService],
+  providers: [AppService, ImageService, GoogleTtsService, StoryService, GenreService],
 })
 export class AppModule {}

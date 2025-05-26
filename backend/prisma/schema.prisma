@@ -7,11 +7,22 @@ datasource db {
   url      = env("DATABASE_URL") // Hier wird die Verbindung zur SQLite-Datenbank definiert
 }
 
+model Genre {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  label     String
+  ageGroups String   // example: 'KIDS, TEENS, ADULTS'
+  stories   Story[]
+}
+
 model Story {
   id            Int         @id @default(autoincrement())
   createdAt     DateTime    @default(now())
   imageUrl      String?
   scheduledAt   String?
+  genreId       Int         @default(0)
+  genre         Genre       @relation(fields: [genreId], references: [id])
+  ageGroup      String      @default("KIDS")
   details       StoryTranslation[]
   sections      Section[]
 }

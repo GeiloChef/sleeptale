@@ -1,4 +1,5 @@
 import { Story, StoryTranslation, Section } from '@prisma/client';
+import { StoryAgeGroup } from '../types/story.types';
 
 export interface StoryWithSectionsDto {
   id: number;
@@ -6,6 +7,8 @@ export interface StoryWithSectionsDto {
   description: string;
   imageUrl?: string;
   scheduledAt?: string;
+  genre: string;
+  ageGroup: StoryAgeGroup;
   sections: Section[];
 }
 
@@ -14,6 +17,8 @@ export interface StoryWithoutSectionsDto {
   title: string;
   description: string;
   imageUrl?: string;
+  genre: string;
+  ageGroup: StoryAgeGroup;
   scheduledAt?: string;
 }
 

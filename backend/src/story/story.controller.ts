@@ -8,14 +8,18 @@ import {
 } from '@nestjs/common';
 import { StoryService } from './story.service';
 import { getLanguageFromHeader } from '../common/utils/language.utils';
+import { StoryAgeGroup, StoryGenre } from './types/story.types';
 
 @Controller('stories')
 export class StoryController {
   constructor(private readonly storiesService: StoryService) {}
 
   @Post('/generate')
-  generateStory() {
-    return this.storiesService.generateAndSaveStory();
+  generateStorygenerateStory(
+    @Query('ageGroup') ageGroup: StoryAgeGroup,
+    @Query('genre') genre?: StoryGenre,
+  ) {
+    return this.storiesService.generateAndSaveStory(ageGroup, genre);
   }
 
   @Get('/by-date')
