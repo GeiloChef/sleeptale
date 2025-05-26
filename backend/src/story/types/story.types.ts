@@ -1,3 +1,5 @@
+import { Genre, Section, Story, StoryTranslation } from '@prisma/client';
+
 export const FALLBACK_LANGUAGE = 'de';
 
 export enum StoryAgeGroup {
@@ -12,6 +14,12 @@ export interface StoryGenre {
   promptModifier: string;
   ageGroups: StoryAgeGroup[];
 }
+
+export type StoryFromDatabase = Story & {
+  details: StoryTranslation[];
+  sections?: Section[];
+  genre: Genre;
+};
 
 export const STORY_GENRES: StoryGenre[] = [
   {

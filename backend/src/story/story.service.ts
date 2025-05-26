@@ -14,6 +14,7 @@ import { Section, Story, StoryTranslation } from '@prisma/client';
 import {
   FALLBACK_LANGUAGE,
   StoryAgeGroup,
+  StoryFromDatabase,
   StoryGenre,
 } from './types/story.types';
 import { TargetLanguageCode } from 'deepl-node';
@@ -48,7 +49,7 @@ export class StoryService {
    * @param language
    */
   async prepareStoryForFrontend(
-    story: Story & { details: StoryTranslation[]; sections?: Section[] },
+    story: StoryFromDatabase,
     language: string,
   ): Promise<any> {
     const translatedStory = await this.translateStory(story, language);
@@ -64,10 +65,10 @@ export class StoryService {
    * @param generateSections
    */
   async translateStory(
-    story: Story & { details: StoryTranslation[]; sections?: Section[] },
+    story: StoryFromDatabase,
     language: string,
     generateSections = true,
-  ): Promise<Story & { details: StoryTranslation[]; sections?: Section[] }> {
+  ): Promise<StoryFromDatabase> {
     const fallbackLanguage = FALLBACK_LANGUAGE;
 
     const originalStoryDetails = story.details.find(
@@ -91,7 +92,6 @@ export class StoryService {
     }
 
     if (translatedStoryDetails && translatedStorySections) {
-      console.log('found translated story');
       return story;
     }
 
@@ -151,7 +151,7 @@ export class StoryService {
   async findStoryById(
     storyId: number,
     language: string,
-  ): Promise<Story & { details: StoryTranslation[]; sections?: Section[] }> {
+  ): Promise<StoryFromDatabase> {
     return await this.prisma.story.findFirst({
       where: {
         id: storyId,
@@ -168,6 +168,7 @@ export class StoryService {
             language: { in: [language, FALLBACK_LANGUAGE] },
           },
         },
+        genre: true,
       },
     });
   }
@@ -206,6 +207,7 @@ export class StoryService {
             language: { in: [language, FALLBACK_LANGUAGE] },
           },
         },
+        genre: true,
       },
     });
 
@@ -224,6 +226,7 @@ export class StoryService {
           details: {
             where: { language: language },
           },
+          genre: true,
         },
       });
 
@@ -255,8 +258,6 @@ export class StoryService {
       genre,
     );
 
-    console.log(storyData);
-
     const storyImageUrl = await this.aiService.generateCoverImageForStory(
       storyData.title,
     );
@@ -267,7 +268,7 @@ export class StoryService {
 
     const story = await this.prisma.story.create({
       data: {
-        imageUrl: '', //storyImageUrl,
+        imageUrl: storyImageUrl,
         genreId: genreId,
         ageGroup: ageGroup,
       },
@@ -297,7 +298,7 @@ export class StoryService {
 
     return this.prisma.story.findUnique({
       where: { id: story.id },
-      include: { sections: true, details: true },
+      include: { sections: true, details: true, genre: true },
     });
   }
 
@@ -322,6 +323,7 @@ export class StoryService {
             language: { in: [language, FALLBACK_LANGUAGE] },
           },
         },
+        genre: true,
       },
     });
 
