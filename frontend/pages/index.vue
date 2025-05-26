@@ -1,36 +1,8 @@
 <template>
- <div class="h-full flex flex-col gap-8 justify-center items-center">
-   <div class="flex flex-col gap-2 text-center">
-     <span class="text-xl">
-       {{ $t('story-of-the-day') }}
-     </span>
+ <div class="h-full flex flex-col gap-8">
+   <StoryOfTheDayOverview />
+   <Divider />
 
-     <span class="italic">
-       - {{ getDateForStory }} -
-     </span>
-   </div>
-
-   <div class="rounded-2xl overflow-hidden">
-     <Image
-         v-if="selectedStory.imageUrl"
-         :src="imageUrl(selectedStory.imageUrl)" />
-   </div>
-
-   <div class="flex flex-col gap-4">
-     <span class="text-4xl text-center">
-       {{ selectedStory.title }}
-     </span>
-
-     <span class="text-xl text-center">
-       {{ selectedStory.description }}
-     </span>
-   </div>
-
-   <div>
-     <Button @click="goToTodayStory">
-       {{ $t('read-now') }}
-     </Button>
-   </div>
  </div>
 </template>
 
@@ -39,6 +11,7 @@
 import {MomentFormat} from "@/types/Core.Types";
 import {navigateToStoryPage} from "@/utils/Story.Utils";
 import {imageUrl} from "@/.nuxt/imports";
+import StoryOfTheDayOverview from "@/components/partials/StoryOfTheDayOverview.vue";
 
 const storyStore = useStoryStore();
 const { selectedStory } = storeToRefs(storyStore);
