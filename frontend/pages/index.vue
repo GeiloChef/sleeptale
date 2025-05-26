@@ -1,6 +1,6 @@
 <template>
  <div class="flex flex-col gap-8 max-w-full overflow-y-auto scroll-smooth snap-y snap-mandatory px-8">
-   <section class="snap-start min-h-64">
+   <section class="snap-start min-h-80">
     <StoryOfTheDayOverview />
    </section>
    <Divider />

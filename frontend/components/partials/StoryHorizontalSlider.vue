@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-2">
     <h3 class="story-section-headline"> {{ title }} </h3>
     <div class="overflow-x-auto scroll-smooth snap-x snap-mandatory">
       <div class="flex gap-8">
@@ -20,8 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import {imageUrl} from "@/utils/Image.Utils";
-import {toRefs} from "vue";
+import { imageUrl } from "@/utils/Image.Utils";
+import { toRefs } from "vue";
 
 const storyStore = useStoryStore();
 const { storyOfTheDay } = storeToRefs(storyStore);
