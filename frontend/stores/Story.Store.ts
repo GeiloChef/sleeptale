@@ -11,9 +11,13 @@ export const useStoryStore = defineStore('storyStore', () => {
   const selectedStory = ref<StoryWithSections>(createDefaultStory());
   const allAvailableStories = ref<StoryWithoutSections[]>([]);
 
-  const fetchStoryByDate = async (date: Moment): Promise<void> => {
-    const fetchedStory = await getStoryByDate(date.format(MomentFormat.UrlParam));
-    selectedStory.value = fetchedStory;
+  const storyOfTheDay = ref<StoryWithSections>(createDefaultStory());
+
+  const fetchStoryByDate = async (date: Moment): Promise<StoryWithSections> => {
+    return await getStoryByDate(date.format(MomentFormat.UrlParam));
+  }
+  const fetchStoryOfTheDay = async (): Promise<void> => {
+    storyOfTheDay.value = await fetchStoryByDate(moment());
   }
 
   const fetchAllStories = async (): Promise<void> => {
@@ -30,9 +34,11 @@ export const useStoryStore = defineStore('storyStore', () => {
   return {
     selectedStory,
     allAvailableStories,
+    storyOfTheDay,
     fetchStoryByDate,
     fetchAllStories,
-    fetchTextToSpeechForStory
+    fetchTextToSpeechForStory,
+    fetchStoryOfTheDay
   }
 }, {
   persist: {
