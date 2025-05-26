@@ -11,7 +11,7 @@
             :src="imageUrl(storyOfTheDay.imageUrl)" />
       </div>
       <div class="flex flex-col gap-2">
-        <span class="text-sm line-clamp-8">
+        <span class="text-sm line-clamp-8 text-gray-500">
          {{ storyOfTheDay.description }}
         </span>
       </div>
