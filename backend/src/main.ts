@@ -10,8 +10,8 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.use('/images', express.static(join(__dirname, '..', 'public', 'images')));
-  app.use('/audio', express.static(join(__dirname, '..', 'public', 'audio')));
+  app.use('/images', express.static(join(process.cwd(), 'storage', 'images')));
+  app.use('/audio', express.static(join(process.cwd(), 'storage', 'audio')));
 
   await app.listen(4000, '0.0.0.0');
 }

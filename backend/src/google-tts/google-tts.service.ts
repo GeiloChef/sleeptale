@@ -62,10 +62,8 @@ export class GoogleTtsService {
     }
 
     const outputPath = join(
-      __dirname,
-      '..',
-      '..',
-      'public',
+      process.cwd(),
+      'storage',
       'audio',
       `${Date.now()}.mp3`,
     );
@@ -113,10 +111,8 @@ export class GoogleTtsService {
     const fileName = `${storyId}_${sectionId}_${languageCode}`;
 
     const outputPath = join(
-      __dirname,
-      '..',
-      '..',
-      'public',
+      process.cwd(),
+      'storage',
       'audio',
       `${fileName}.mp3`,
     );

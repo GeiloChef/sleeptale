@@ -9,13 +9,7 @@ import { OpenAI } from 'openai'; // falls du OpenAI SDK nutzt
 
 @Injectable()
 export class ImageService {
-  private readonly imageFolder = join(
-    __dirname,
-    '..',
-    '..',
-    'public',
-    'images',
-  );
+  private readonly imageFolder = join(process.cwd(), 'storage', 'images');
   private readonly openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   constructor() {
