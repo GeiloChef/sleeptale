@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StoryModule } from './story/story.module';
@@ -13,6 +13,7 @@ import { GoogleTtsModule } from './google-tts/google-tts.module';
 import { StoryService } from './story/story.service';
 import { TranslationModule } from './translation/translation.module';
 import { GenreService } from './genre/genre.service';
+import { RequestLoggerMiddleware } from './middleware/request-logger.middleware';
 
 @Module({
   imports: [
@@ -29,6 +30,16 @@ import { GenreService } from './genre/genre.service';
     TranslationModule,
   ],
   controllers: [AppController, GoogleTtsController],
-  providers: [AppService, ImageService, GoogleTtsService, StoryService, GenreService],
+  providers: [
+    AppService,
+    ImageService,
+    GoogleTtsService,
+    StoryService,
+    GenreService,
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLoggerMiddleware).forRoutes('*'); // auf alle Routen anwenden
+  }
+}

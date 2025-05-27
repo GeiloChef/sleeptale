@@ -5,7 +5,10 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: '*',
+    credentials: true,
+  });
 
   app.use('/images', express.static(join(__dirname, '..', 'public', 'images')));
   app.use('/audio', express.static(join(__dirname, '..', 'public', 'audio')));
