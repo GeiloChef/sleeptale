@@ -8,7 +8,7 @@
       <AppMenu />
     </aside>
 
-    <main class="flex flex-grow overflow-y-auto h-full w-screen py-8">
+    <main class="flex h-full w-screen py-8">
       <slot />
     </main>
   </div>

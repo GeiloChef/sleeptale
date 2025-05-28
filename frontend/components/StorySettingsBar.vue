@@ -5,7 +5,7 @@
       <IncreaseFontSizeIcon @click="applicationStore.increaseFontSize" />
     </div>
 
-    <Icon icon="volume-high" @click="emit('getTextToSpeechForSection')" />
+    <Icon icon="bookmark" />
   </div>
 </template>
 

@@ -1,32 +1,36 @@
 <template>
-  <div class="flex flex-col gap-4 w-screen">
-    <div class="w-full">
-
+  <div class="flex flex-col gap-4 min-h-0 w-full">
+    <div class="w-full flex-shrink-0">
       <Image
         v-if="selectedStory.imageUrl"
         :src="imageUrl(selectedStory.imageUrl)" />
       <StorySettingsBar
           class="pt-6 px-4"
           @getTextToSpeechForSection="onGetTextToSpeechForSection" />
-      <audio ref="AudioPlayer_Ref" style="display: none" />
     </div>
 
-    <div>
+    <div class="flex-1 overflow-y-auto">
       <Carousel
           ref="StorySectionCarousel_Ref"
           :value="selectedStory.sections"
           :numVisible="1"
           :numScroll="1"
           :showNavigators="false"
-          circular>
+          circular
+          class="h-full">
         <template #item="section">
-          <div
-              class="rounded p-4 max-w-full"
-              :style="{fontSize: `${applicationStore.fontSize}px`}">
-            {{ section.data.text }}
+          <div class="flex h-full w-full p-4">
+            <div
+                class="flex-1 overflow-y-auto text-center"
+                :style="{ fontSize: `${applicationStore.fontSize}px` }">
+              {{ section.data.text }}
+            </div>
           </div>
         </template>
       </Carousel>
+    </div>
+    <div class="flex-shrink-0">
+      <AudioPlayer v-if="false" />
     </div>
   </div>
 </template>

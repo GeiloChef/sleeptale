@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container flex flex-col h-screen">
+  <div class="app-container flex flex-col h-screen max-w-screen">
     <header class="header">
       <AppHeader />
     </header>
@@ -8,7 +8,7 @@
       <AppMenu />
     </aside>
 
-    <main class="flex flex-grow overflow-y-auto h-full w-screen">
+    <main class="flex flex-grow overflow-y-auto h-full">
       <slot />
     </main>
   </div>
