@@ -67,7 +67,12 @@ export default defineNuxtConfig({
         'font',
         'plus',
         'minus',
-        'volume-high'
+        'volume-high',
+        'play',
+        'pause',
+        'forward-step',
+        'backward-step',
+        'bookmark',
       ],
     },
     component: 'Icon',
