@@ -15,6 +15,4 @@ import DecreaseFontSizeIcon from "@/components/icons/DecreaseFontSizeIcon.vue";
 import { useApplicationStore } from "@/stores/Application.Store";
 
 const applicationStore = useApplicationStore()
-
-const emit = defineEmits(['getTextToSpeechForSection'])
 </script>

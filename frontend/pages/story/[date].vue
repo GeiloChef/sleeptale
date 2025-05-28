@@ -5,12 +5,10 @@
         v-if="selectedStory.imageUrl"
         :src="imageUrl(selectedStory.imageUrl)" />
       <StorySettingsBar
-          class="pt-6 px-4"
-          @getTextToSpeechForSection="onGetTextToSpeechForSection" />
+          class="pt-6 px-4" />
     </div>
 
     <div class="flex-1 overflow-y-auto">
-      {{ currentSectionIndex }}
       <Carousel
           ref="StorySectionCarousel_Ref"
           :value="selectedStory.sections"
@@ -58,10 +56,6 @@ const { selectedStory, currentSectionIndex } = storeToRefs(storyStore);
 const applicationStore = useApplicationStore();
 
 const StorySectionCarousel_Ref = ref();
-const onGetTextToSpeechForSection = async (): Promise<void> => {
-  console.log(StorySectionCarousel_Ref.value.value[StorySectionCarousel_Ref.value.d_page])
-  const currentSection = StorySectionCarousel_Ref.value.value[StorySectionCarousel_Ref.value.d_page]
-}
 
 onMounted(async (): Promise<void> => {
   if (route.params.date) {
