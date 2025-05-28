@@ -10,14 +10,17 @@
     </div>
 
     <div class="flex-1 overflow-y-auto">
+      {{ currentSectionIndex }}
       <Carousel
           ref="StorySectionCarousel_Ref"
           :value="selectedStory.sections"
+          :page="currentSectionIndex"
           :numVisible="1"
           :numScroll="1"
           :showNavigators="false"
           circular
-          class="h-full">
+          class="h-full"
+          @update:page="storyStore.setNewSectionIndex">
         <template #item="section">
           <div class="flex h-full w-full p-4">
             <div
@@ -30,7 +33,7 @@
       </Carousel>
     </div>
     <div class="flex-shrink-0">
-      <AudioPlayer v-if="false" />
+      <AudioPlayer />
     </div>
   </div>
 </template>
@@ -41,7 +44,7 @@ import {onMounted} from "vue";
 import {MomentFormat} from "@/types/Core.Types";
 import {useRoute} from "nuxt/app";
 import {imageUrl} from "@/utils/Image.Utils";
-import {audioUrl} from "@/utils/Audio.Utils";
+import AudioPlayer from "@/components/partials/AudioPlayer.vue";
 
 definePageMeta({
   layout: 'story',
@@ -50,21 +53,14 @@ definePageMeta({
 const route = useRoute();
 
 const storyStore = useStoryStore();
-const { selectedStory } = storeToRefs(storyStore);
+const { selectedStory, currentSectionIndex } = storeToRefs(storyStore);
 
 const applicationStore = useApplicationStore();
 
 const StorySectionCarousel_Ref = ref();
-const AudioPlayer_Ref = ref<HTMLAudioElement>();
-
 const onGetTextToSpeechForSection = async (): Promise<void> => {
   console.log(StorySectionCarousel_Ref.value.value[StorySectionCarousel_Ref.value.d_page])
   const currentSection = StorySectionCarousel_Ref.value.value[StorySectionCarousel_Ref.value.d_page]
-  const textToSpeechUrl = await storyStore.fetchTextToSpeechForStory(selectedStory.value.id, currentSection.id);
-  if (AudioPlayer_Ref.value) {
-    AudioPlayer_Ref.value.src = audioUrl(textToSpeechUrl);
-    await AudioPlayer_Ref.value.play();
-  }
 }
 
 onMounted(async (): Promise<void> => {

@@ -9,6 +9,8 @@ import {MomentFormat} from "@/types/Core.Types";
 export const useStoryStore = defineStore('storyStore', () => {
   const { getStoryByDate, getAllAvailableStories, getTextToSpeechForSection } = useStories();
   const selectedStory = ref<StoryWithSections>(createDefaultStory());
+  const currentSectionIndex = ref<number>(0)
+
   const allAvailableStories = ref<StoryWithoutSections[]>([]);
 
   const storyOfTheDay = ref<StoryWithSections>(createDefaultStory());
@@ -31,14 +33,20 @@ export const useStoryStore = defineStore('storyStore', () => {
     return fetchedAudio;
   }
 
+  const setNewSectionIndex = (index: number): void => {
+    currentSectionIndex.value = index;
+  }
+
   return {
     selectedStory,
     allAvailableStories,
     storyOfTheDay,
+    currentSectionIndex,
     fetchStoryByDate,
     fetchAllStories,
     fetchTextToSpeechForStory,
-    fetchStoryOfTheDay
+    fetchStoryOfTheDay,
+    setNewSectionIndex
   }
 }, {
   persist: {

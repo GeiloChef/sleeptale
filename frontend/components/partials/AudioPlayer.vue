@@ -1,6 +1,6 @@
 <template>
-  <div class="flex items-center gap-8 py-6 border-t-white border-t flex flex-row justify-center items-center">
-    <div>
+  <div class="flex items-center gap-8 py-6 border-t-white border-t flex flex-row justify-center items-center relative">
+    <div class="flex flex-row gap-8">
       <button @click="previous">
         <Icon icon="backward-step" size="xl" />
       </button>
@@ -15,7 +15,9 @@
       </button>
     </div>
 
-    <button id="test" @click="toggleVolumeSliderPopover">
+    <button
+        class="absolute right-4 top-1/2 -translate-y-1/2"
+        @click="toggleVolumeSliderPopover">
       <Icon icon="volume-high" size="md" />
     </button>
     <Popover ref="VolumeSliderPopover_Ref">
@@ -23,6 +25,8 @@
           v-model="volume"
           orientation="vertical"
           @change="setVolume"
+          :min="1"
+          :max="100"
           class="h-48" />
     </Popover>
   </div>
@@ -31,14 +35,12 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 
-const tracks = [
-  '2_25_de.mp3',
-  '6_26_de.mp3',
-  '6_27_de.mp3',
-]
+const emit = defineEmits(['changeTextToSpeechTrack'])
 
-const currentTrackIndex = ref(0)
-const audio = ref(new Audio(audioUrl(tracks[currentTrackIndex.value])))
+const storyStore = useStoryStore();
+const { selectedStory, currentSectionIndex } = storeToRefs(storyStore);
+
+const audio = ref(new Audio());
 const isPlaying = ref(false)
 const volume = ref(1);
 
@@ -56,19 +58,20 @@ const togglePlay = () => {
   isPlaying.value ? pause() : play()
 }
 
-const next = () => {
-  currentTrackIndex.value = (currentTrackIndex.value + 1) % tracks.length
+const next = (): void => {
+  currentSectionIndex.value = (currentSectionIndex.value + 1) % selectedStory.value.sections.length
   changeTrack()
 }
 
-const previous = () => {
-  currentTrackIndex.value = (currentTrackIndex.value - 1 + tracks.length) % tracks.length
+const previous = (): void => {
+  currentSectionIndex.value = (currentSectionIndex.value - 1 + selectedStory.value.sections.length) % selectedStory.value.sections.length
   changeTrack()
 }
 
-const changeTrack = () => {
-  audio.value.pause()
-  audio.value = new Audio(audioUrl(tracks[currentTrackIndex.value]))
+const changeTrack = async (): Promise<void> => {
+  const newTrackUrl = await getAudioTrackUrl()
+  audio.value.pause();
+  audio.value = new Audio(audioUrl(newTrackUrl))
   audio.value.volume = volume.value
   if (isPlaying.value) {
     audio.value.play()
@@ -77,19 +80,31 @@ const changeTrack = () => {
 
 const VolumeSliderPopover_Ref = ref();
 const toggleVolumeSliderPopover = (event: MouseEvent) => {
-  console.log(event)
   VolumeSliderPopover_Ref.value.toggle(event);
 }
 
 const setVolume = () => {
-  audio.value.volume = volume.value
+  audio.value.volume = volume.value / 100
 }
 
-onMounted(() => {
+const getAudioTrackUrl = async (): Promise<string> => {
+  return await storyStore.fetchTextToSpeechForStory(
+      selectedStory.value.id,
+      selectedStory.value.sections[currentSectionIndex.value].id);
+}
+
+watch(currentSectionIndex, () => {
+  changeTrack();
+})
+
+onMounted(async (): Promise<void> => {
+  const firstSectionTextToSpeech = await getAudioTrackUrl();
+
+  audio.value = new Audio(audioUrl(firstSectionTextToSpeech));
   audio.value.volume = volume.value
 })
 
-onUnmounted(() => {
+onUnmounted((): void => {
   audio.value.pause()
   audio.value = null
 })
