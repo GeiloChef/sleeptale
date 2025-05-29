@@ -22,8 +22,8 @@ export class TranslationService {
 
   async translateText(
     text: string,
-    from: SourceLanguageCode,
-    to: TargetLanguageCode,
+    from: SourceLanguageCode | string,
+    to: TargetLanguageCode | string,
   ): Promise<string> {
     try {
       const fromLanguageDeepl = this.getLanguageName(
@@ -33,7 +33,7 @@ export class TranslationService {
 
       const result = await this.translator.translateText(
         text,
-        fromLanguageDeepl,
+        from as SourceLanguageCode,
         toLanguageDeepl,
       );
       return result.text;

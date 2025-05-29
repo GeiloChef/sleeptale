@@ -5,10 +5,12 @@ import {
   Query,
   BadRequestException,
   Headers,
+  Body,
 } from '@nestjs/common';
 import { StoryService } from './story.service';
 import { getLanguageFromHeader } from '../common/utils/language.utils';
 import { StoryAgeGroup, StoryGenre } from './types/story.types';
+import { Story } from '@prisma/client';
 
 @Controller('stories')
 export class StoryController {
@@ -59,5 +61,26 @@ export class StoryController {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  @Post('search')
+  async searchStories(
+    @Body('query') query?: string,
+    @Body('genre') genre?: string | string[],
+    @Body('ageGroup') ageGroup?: string | string[],
+    @Body('limit') limit = 20,
+    @Body('cursor') cursor?: number,
+    @Headers('accept-language') acceptLanguage?: string,
+  ): Promise<any> {
+    const language = getLanguageFromHeader(acceptLanguage);
+
+    return this.storiesService.searchStories({
+      query,
+      genre: Array.isArray(genre) ? genre : genre ? [genre] : [],
+      ageGroup: Array.isArray(ageGroup) ? ageGroup : ageGroup ? [ageGroup] : [],
+      limit: Number(limit),
+      cursor,
+      language,
+    });
   }
 }

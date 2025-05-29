@@ -17,7 +17,7 @@ import {
   StoryFromDatabase,
   StoryGenre,
 } from './types/story.types';
-import { TargetLanguageCode } from 'deepl-node';
+import { SourceLanguageCode, TargetLanguageCode } from 'deepl-node';
 import { GenreService } from '../genre/genre.service';
 
 @Injectable()
@@ -369,5 +369,126 @@ export class StoryService {
     if (!section) throw new Error('Keine Section gefunden!');
 
     return section.text;
+  }
+
+  async searchStories(params: {
+    query?: string;
+    genre: string[];
+    ageGroup: string[];
+    limit: number;
+    cursor?: number;
+    language: string;
+  }) {
+    const { query, genre, ageGroup, limit, cursor, language } = params;
+    const fallbackLanguage = FALLBACK_LANGUAGE;
+
+    const matchedStoryIds = new Set<number>();
+
+    // 1. Search translations in requested language
+    const userLangMatches = await this.prisma.storyTranslation.findMany({
+      where: {
+        language,
+        OR: [
+          { title: { contains: query } },
+          { description: { contains: query } },
+        ],
+      },
+      select: { storyId: true },
+    });
+
+    userLangMatches.forEach((t) => matchedStoryIds.add(t.storyId));
+
+    // 2. Translate query into fallback language (if needed)
+    let translatedQuery = query;
+    console.log(language);
+    if (language !== fallbackLanguage) {
+      translatedQuery = await this.translationService.translateText(
+        query,
+        language,
+        fallbackLanguage,
+      );
+    }
+
+    console.log(translatedQuery);
+    // 3. Search fallback translations
+    const fallbackMatches = await this.prisma.storyTranslation.findMany({
+      where: {
+        language: fallbackLanguage,
+        OR: [
+          { title: { contains: translatedQuery } },
+          { description: { contains: translatedQuery } },
+        ],
+      },
+      select: { storyId: true },
+    });
+
+    fallbackMatches.forEach((t) => matchedStoryIds.add(t.storyId));
+
+    // 4. Convert to sorted array (sort by createdAt DESC)
+    const matchedIdsArray = Array.from(matchedStoryIds);
+
+    console.log(matchedIdsArray);
+
+    const stories = await this.prisma.story.findMany({
+      where: {
+        id: {
+          in: matchedIdsArray,
+          ...(cursor ? { lt: cursor } : {}),
+        },
+        ...(genre.length > 0 ? { genre: { key: { in: genre } } } : {}),
+        ...(ageGroup.length > 0 ? { ageGroup: { in: ageGroup } } : {}),
+      },
+      include: {
+        genre: true,
+        details: {
+          where: { language },
+          take: 1,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: limit + 1, // fetch one extra to detect if there's more
+    });
+
+    // 5. Paginate results
+    const hasMore = stories.length > limit;
+    const paginated = hasMore ? stories.slice(0, limit) : stories;
+
+    console.log(paginated);
+    // 6. Fallback translation logic for missing ones
+    const results = await Promise.all(
+      paginated.map(async (story) => {
+        const translation = story.details[0];
+        if (!translation) {
+          // fallback to German and optionally translate on the fly
+          const fallbackStory = await this.findStoryById(
+            story.id,
+            fallbackLanguage,
+          );
+
+          return this.translateStory(fallbackStory, language, false);
+
+          // Optionally: translate to target language if not available
+          // Todo: do the translation and store it directly
+        }
+
+        return {
+          id: story.id,
+          createdAt: story.createdAt,
+          imageUrl: story.imageUrl,
+          ageGroup: story.ageGroup,
+          genre: story.genre,
+          translation,
+        };
+      }),
+    );
+
+    const nextCursor = hasMore ? paginated[paginated.length - 1].id : null;
+
+    return {
+      stories: results,
+      nextCursor,
+    };
   }
 }
