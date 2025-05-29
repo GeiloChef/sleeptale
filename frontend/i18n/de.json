@@ -3,9 +3,11 @@
   "end-story": "Story beenden",
   "new-story": "Neue Geschichte | Neue Geschichten",
   "next-page": "Nächste Seite",
+  "no-stories-for-search-term": "Es wurde keine passende Geschichte gefunden.",
   "previous-page": "Vorherige Seite",
   "read-book": "Story lesen",
   "read-now": "Jetzt lesen",
+  "search-story": "Geschichte suchen",
   "story-for-today": "Heutige Geschichte",
   "story-of-the-day": "Geschichte des Tages",
   "test": "Testing..."
