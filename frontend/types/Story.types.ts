@@ -16,4 +16,17 @@ export interface StoryWithSections {
   sections: Section[]
 }
 
+export interface StorySearchQuery {
+  query: string,
+  genre: string[],
+  ageGroup: string[],
+  limit: number,
+  cursor: number
+}
+
 export type StoryWithoutSections = Omit<StoryWithSections, 'sections'>;
+
+export interface PaginatedStories {
+  stories: StoryWithoutSections[],
+  cursor: number
+}
