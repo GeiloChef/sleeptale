@@ -73,6 +73,8 @@ export default defineNuxtConfig({
         'forward-step',
         'backward-step',
         'bookmark',
+        'home',
+        'magnifying-glass'
       ],
     },
     component: 'Icon',
