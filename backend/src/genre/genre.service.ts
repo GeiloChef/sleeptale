@@ -5,6 +5,7 @@ import {
   StoryGenre,
 } from '../story/types/story.types';
 import { PrismaService } from '../prisma/prisma.service';
+import { genreDtoMaker } from './dto/genre.dto';
 
 @Injectable()
 export class GenreService {
@@ -46,5 +47,15 @@ export class GenreService {
     return STORY_GENRES.find(
       (storyGenre) => storyGenre.key === randomGenre.key,
     );
+  }
+
+  async getAllGenres() {
+    const genres = await this.prisma.genre.findMany({
+      orderBy: { label: 'asc' },
+    });
+
+    return genres.map((genre) => {
+      return genreDtoMaker(genre);
+    });
   }
 }

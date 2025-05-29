@@ -14,6 +14,8 @@ import { StoryService } from './story/story.service';
 import { TranslationModule } from './translation/translation.module';
 import { GenreService } from './genre/genre.service';
 import { RequestLoggerMiddleware } from './middleware/request-logger.middleware';
+import { GenreController } from './genre/genre.controller';
+import { GenreModule } from './genre/genre.module';
 
 @Module({
   imports: [
@@ -28,8 +30,9 @@ import { RequestLoggerMiddleware } from './middleware/request-logger.middleware'
     ImageModule,
     GoogleTtsModule,
     TranslationModule,
+    GenreModule,
   ],
-  controllers: [AppController, GoogleTtsController],
+  controllers: [AppController, GoogleTtsController, GenreController],
   providers: [
     AppService,
     ImageService,
