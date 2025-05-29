@@ -45,17 +45,17 @@ const toggleMenu = (event: Event): void => {
 
 const items = ref([
   {
+    label: $t('home'),
+    icon: 'home',
+    command: () => {
+      navigateByRouteName('index')
+    }
+  },
+  {
     label: $t('story-of-the-day'),
     icon: 'book-open',
     command: () => {
       navigateToStoryPage(moment().format(MomentFormat.DateUrl));
-    }
-  },
-  {
-    label: $t('all-stories'),
-    icon: 'bars-staggered',
-    command: () => {
-      navigateByRouteName('stories')
     }
   },
 ]);
