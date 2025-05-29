@@ -1,4 +1,4 @@
-import type {StoryWithoutSections, StoryWithSections} from "@/types/Story.types";
+import type {PaginatedStories, StorySearchQuery, StoryWithoutSections, StoryWithSections} from "@/types/Story.types";
 import {mapStoryApiToDomainWithSections} from "@/utils/mappers/Story.Mapper";
 
 export const useStories = () => {
@@ -48,5 +48,17 @@ export const useStories = () => {
     return data.value.url as string
   }
 
-  return { getByDate, getStoryByDate, getAllAvailableStories, getTextToSpeechForSection }
+  const getStoriesForSearchQuery = async (searchQuery: StorySearchQuery): Promise<PaginatedStories> => {
+    const { data, error } = await useFetch(`${apiBase}/stories/search`, {
+      headers: {
+        'Accept-Language': locale.value,
+      },
+      body: searchQuery,
+      method: 'POST'
+    })
+    if (error.value) throw error.value
+    return data.value as PaginatedStories
+  }
+
+  return { getByDate, getStoryByDate, getAllAvailableStories, getTextToSpeechForSection, getStoriesForSearchQuery }
 }
