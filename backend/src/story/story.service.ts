@@ -382,59 +382,76 @@ export class StoryService {
     const { query, genre, ageGroup, limit, cursor, language } = params;
     const fallbackLanguage = FALLBACK_LANGUAGE;
 
-    const matchedStoryIds = new Set<number>();
+    let matchedIdsArray: number[] | undefined = undefined;
 
-    // 1. Search translations in requested language
-    const userLangMatches = await this.prisma.storyTranslation.findMany({
-      where: {
-        language,
-        OR: [
-          { title: { contains: query } },
-          { description: { contains: query } },
-        ],
-      },
-      select: { storyId: true },
-    });
+    // Step 1: Only search for title/description if query is provided
+    if (query && query.trim().length > 0) {
+      const matchedStoryIds = new Set<number>();
 
-    userLangMatches.forEach((t) => matchedStoryIds.add(t.storyId));
+      // 1. Search translations in requested language
+      const userLangMatches = await this.prisma.storyTranslation.findMany({
+        where: {
+          language,
+          OR: [
+            { title: { contains: query } },
+            { description: { contains: query } },
+          ],
+        },
+        select: { storyId: true },
+      });
 
-    // 2. Translate query into fallback language (if needed)
-    let translatedQuery = query;
-    console.log(language);
-    if (language !== fallbackLanguage) {
-      translatedQuery = await this.translationService.translateText(
-        query,
-        language,
-        fallbackLanguage,
-      );
+      userLangMatches.forEach((t) => matchedStoryIds.add(t.storyId));
+
+      // 2. Translate query into fallback language (if needed)
+      let translatedQuery = query;
+      if (language !== fallbackLanguage) {
+        translatedQuery = await this.translationService.translateText(
+          query,
+          language,
+          fallbackLanguage,
+        );
+      }
+
+      // 3. Search fallback translations
+      const fallbackMatches = await this.prisma.storyTranslation.findMany({
+        where: {
+          language: fallbackLanguage,
+          OR: [
+            { title: { contains: translatedQuery } },
+            { description: { contains: translatedQuery } },
+          ],
+        },
+        select: { storyId: true },
+      });
+
+      fallbackMatches.forEach((t) => matchedStoryIds.add(t.storyId));
+
+      matchedIdsArray = Array.from(matchedStoryIds);
+
+      // Early return: query provided but no matches found
+      if (matchedIdsArray.length === 0) {
+        return {
+          stories: [],
+          nextCursor: null,
+        };
+      }
     }
 
-    console.log(translatedQuery);
-    // 3. Search fallback translations
-    const fallbackMatches = await this.prisma.storyTranslation.findMany({
-      where: {
-        language: fallbackLanguage,
-        OR: [
-          { title: { contains: translatedQuery } },
-          { description: { contains: translatedQuery } },
-        ],
-      },
-      select: { storyId: true },
-    });
-
-    fallbackMatches.forEach((t) => matchedStoryIds.add(t.storyId));
-
-    // 4. Convert to sorted array (sort by createdAt DESC)
-    const matchedIdsArray = Array.from(matchedStoryIds);
-
-    console.log(matchedIdsArray);
-
+    // Step 2: Query the actual stories
     const stories = await this.prisma.story.findMany({
       where: {
-        id: {
-          in: matchedIdsArray,
-          ...(cursor ? { lt: cursor } : {}),
-        },
+        ...(matchedIdsArray
+          ? {
+              id: {
+                in: matchedIdsArray,
+                ...(cursor ? { lt: cursor } : {}),
+              },
+            }
+          : cursor
+            ? {
+                id: { lt: cursor },
+              }
+            : {}),
         ...(genre.length > 0 ? { genre: { key: { in: genre } } } : {}),
         ...(ageGroup.length > 0 ? { ageGroup: { in: ageGroup } } : {}),
       },
@@ -448,29 +465,23 @@ export class StoryService {
       orderBy: {
         createdAt: 'desc',
       },
-      take: limit + 1, // fetch one extra to detect if there's more
+      take: limit + 1,
     });
 
-    // 5. Paginate results
+    // Step 3: Paginate results
     const hasMore = stories.length > limit;
     const paginated = hasMore ? stories.slice(0, limit) : stories;
 
-    console.log(paginated);
-    // 6. Fallback translation logic for missing ones
+    // Step 4: Translate if no detail in target language
     const results = await Promise.all(
       paginated.map(async (story) => {
         const translation = story.details[0];
         if (!translation) {
-          // fallback to German and optionally translate on the fly
           const fallbackStory = await this.findStoryById(
             story.id,
             fallbackLanguage,
           );
-
           return this.translateStory(fallbackStory, language, false);
-
-          // Optionally: translate to target language if not available
-          // Todo: do the translation and store it directly
         }
 
         return {
@@ -479,7 +490,7 @@ export class StoryService {
           imageUrl: story.imageUrl,
           ageGroup: story.ageGroup,
           genre: story.genre,
-          translation,
+          details: [translation],
         };
       }),
     );
@@ -487,7 +498,9 @@ export class StoryService {
     const nextCursor = hasMore ? paginated[paginated.length - 1].id : null;
 
     return {
-      stories: results,
+      stories: results.map((story: StoryFromDatabase) =>
+        storyWithoutSectionsDtoMaker(story, language),
+      ),
       nextCursor,
     };
   }
