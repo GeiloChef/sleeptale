@@ -1,23 +1,13 @@
 {
-  "all-stories": "Alle Geschichten",
-  "end-story": "Story beenden",
-  "new-story": "Neue Geschichte | Neue Geschichten",
-  "next-page": "Nächste Seite",
-  "no-stories-for-search-term": "Es wurde keine passende Geschichte gefunden.",
-  "previous-page": "Vorherige Seite",
-  "read-book": "Story lesen",
-  "read-now": "Jetzt lesen",
-  "search-story": "Geschichte suchen",
-  "story-for-today": "Heutige Geschichte",
-  "story-of-the-day": "Geschichte des Tages",
-  "test": "Testing...",
-  "select-genre": "Genre auswählen",
   "age-group": "Altersgruppe",
   "age-groups": {
+    "adults": "Erwachsene",
     "kids": "Kinder",
-    "teens": "Jugendliche",
-    "adults": "Erwachsene"
+    "teens": "Jugendliche"
   },
+  "all-stories": "Alle Geschichten",
+  "daily-story": "Tägliche Geschichte",
+  "end-story": "Story beenden",
   "genre": {
     "adventure": "Abenteuer",
     "bedtime": "Gute-Nacht",
@@ -38,5 +28,18 @@
     "slice-of-life": "Ausschnitt aus dem Leben",
     "supernatural": "Übernatürlich",
     "thriller": "Thriller"
-  }
+  },
+  "home": "Home",
+  "new-story": "Neue Geschichte | Neue Geschichten",
+  "next-page": "Nächste Seite",
+  "no-stories-for-search-term": "Es wurde keine passende Geschichte gefunden.",
+  "previous-page": "Vorherige Seite",
+  "profile": "Profil",
+  "read-book": "Story lesen",
+  "read-now": "Jetzt lesen",
+  "search-story": "Geschichte suchen",
+  "select-genre": "Genre auswählen",
+  "story-for-today": "Heutige Geschichte",
+  "story-of-the-day": "Geschichte des Tages",
+  "test": "Testing..."
 }
