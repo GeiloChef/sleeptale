@@ -45,6 +45,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-vue": "^10.0.0",
+    "nuxt-lodash": "^2.5.3",
     "sass-embedded": "^1.87.0",
     "typescript": "^5.8.3"
   }
