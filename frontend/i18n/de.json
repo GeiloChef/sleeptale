@@ -10,5 +10,33 @@
   "search-story": "Geschichte suchen",
   "story-for-today": "Heutige Geschichte",
   "story-of-the-day": "Geschichte des Tages",
-  "test": "Testing..."
+  "test": "Testing...",
+  "select-genre": "Genre auswählen",
+  "age-group": "Altersgruppe",
+  "age-groups": {
+    "kids": "Kinder",
+    "teens": "Jugendliche",
+    "adults": "Erwachsene"
+  },
+  "genre": {
+    "adventure": "Abenteuer",
+    "bedtime": "Gute-Nacht",
+    "comedy": "Komödie",
+    "drama": "Drama",
+    "dystopian": "Dystopisch",
+    "educational": "Bildend",
+    "fantasy": "Fantasie",
+    "feel-good": "Wohlfühlend",
+    "folktale": "Märchen",
+    "historical": "Historisch",
+    "horror": "Horror",
+    "mystery": "Mystery",
+    "mythology": "Mythen",
+    "psychological": "Psychology",
+    "romance": "Romantisch",
+    "science-fiction": "Science Fiction",
+    "slice-of-life": "Ausschnitt aus dem Leben",
+    "supernatural": "Übernatürlich",
+    "thriller": "Thriller"
+  }
 }
