@@ -22,6 +22,10 @@
       </Menu>
     </template>
 
+    <template #end>
+      <Icon icon="magnifying-glass" @click="navigateByRouteName('search')"></Icon>
+    </template>
+
     <template #button>
       <div class="w-full flex justify-center items-center">
         {{ $t('sleeptale') }}
