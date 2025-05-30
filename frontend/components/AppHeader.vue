@@ -58,6 +58,13 @@ const items = ref([
       navigateToStoryPage(moment().format(MomentFormat.DateUrl));
     }
   },
+  {
+    label: $t('search'),
+    icon: 'magnifying-glass',
+    command: () => {
+      navigateByRouteName('search')
+    }
+  },
 ]);
 </script>
 

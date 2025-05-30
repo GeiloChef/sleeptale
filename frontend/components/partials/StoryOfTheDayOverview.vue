@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-4">
     <h2 class="story-section-headline">{{ $t('story-of-the-day') }}</h2>
     <div class="flex flex-col gap-2 items-center">
-      <div class="rounded-2xl overflow-hidden w-48">
+      <div class="rounded-2xl overflow-hidden">
         <Image
             v-if="storyOfTheDay.imageUrl"
             :src="imageUrl(storyOfTheDay.imageUrl)" />

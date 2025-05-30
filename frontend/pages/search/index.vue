@@ -63,14 +63,14 @@
       <div
           v-for="story in stories"
           :key="story.id"
-          class="flex flex-col gap-2">
+          class="flex flex-col gap-2"
+          @click="navigateToStoryPage(moment(story.scheduledAt).format(MomentFormat.DateUrl))">
         <div class="rounded-xl overflow-hidden">
           <Image
               v-if="story.imageUrl"
               :src="imageUrl(story.imageUrl)" />
         </div>
         <div class="flex flex-col gap-2">
-          <span class="text-sm text-gray-400"> 10 min </span>
           <span class="font-bold">{{story.title}}</span>
           <span class="text-sm italic">{{story.description}}</span>
         </div>
@@ -91,6 +91,7 @@ import {type StorySearchQuery, type StoryWithoutSections} from "@/types/Story.ty
 import { imageUrl } from "@/utils/Image.Utils";
 import {debounce} from "lodash-es";
 import {getAgeGroups} from "@/utils/Story.Utils";
+import {MomentFormat} from "@/types/Core.Types";
 
 const storiesApi = useStories();
 
