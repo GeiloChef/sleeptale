@@ -1,7 +1,8 @@
 import type {Section, StoryWithSections} from "@/types/Story.types";
 import type {Moment} from "moment";
-import {MomentFormat} from "@/types/Core.Types";
+import {type Dictionary, MomentFormat} from "@/types/Core.Types";
 import {navigateByRouteName} from "@/utils/Navigation.Utils";
+import {AgeGroupTypes} from "@/types/Story.types";
 
 export const navigateToStoryPage= (date: Moment): void => {
   navigateByRouteName('story-date', { date: date })
@@ -51,4 +52,21 @@ export const createDefaultSections = (): Section[] => {
       storyId: 0
     },
   ]
-}
+};
+
+export const getAgeGroups = (): Dictionary<AgeGroupTypes>[] => {
+  return [
+    {
+      value: AgeGroupTypes.Kids,
+      label: 'age-groups.kids'
+    },
+    {
+      value: AgeGroupTypes.Teens,
+      label: 'age-groups.teens'
+    },
+    {
+      value: AgeGroupTypes.Adults,
+      label: 'age-groups.adults'
+    }
+  ];
+};
