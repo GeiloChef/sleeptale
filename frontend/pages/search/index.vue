@@ -9,8 +9,52 @@
             v-model="searchQuery.query"
             class="w-full"
             :placeholder="$t('search-story')"
-            @input="onDebouncedInput"/>
+            @input="onDebouncedQueryInput"/>
       </IconField>
+
+      <div class="flex flex-row gap-4">
+        <MultiSelect
+            v-model="searchQuery.genre"
+            :options="allAvailableGenres"
+            optionLabel="label"
+            optionValue="key"
+            size="small"
+            :placeholder="$t('select-genre')"
+            class="w-full"
+            @change="onDebouncedFilterChange">
+            <template #chip="genreText">
+              <div class="flex items-center">
+                <div>{{ $t(`genre.${genreText.value}`) }}</div>
+              </div>
+            </template>
+            <template #option="genre">
+              <div class="flex items-center">
+                <div>{{ $t(genre.option.label) }}</div>
+              </div>
+            </template>
+        </MultiSelect>
+
+        <MultiSelect
+            v-model="searchQuery.ageGroup"
+            :options="ageGroups"
+            optionLabel="label"
+            optionValue="value"
+            size="small"
+            :placeholder="$t('age-group')"
+            class="w-full"
+            @change="onDebouncedFilterChange">
+          <template #chip="ageGroup">
+            <div class="flex items-center">
+              <div>{{ $t(`genre.${ageGroup.value}`) }}</div>
+            </div>
+          </template>
+            <template #option="ageGroup">
+              <div class="flex items-center">
+                <div>{{ $t(ageGroup.option.label) }}</div>
+              </div>
+            </template>
+        </MultiSelect>
+      </div>
     </div>
 
     <div
@@ -43,11 +87,15 @@
 </template>
 
 <script setup lang="ts">
+import {type StorySearchQuery, type StoryWithoutSections} from "@/types/Story.types";
+import { imageUrl } from "@/utils/Image.Utils";
+import {debounce} from "lodash-es";
+import {getAgeGroups} from "@/utils/Story.Utils";
 
-import type {StorySearchQuery, StoryWithoutSections} from "@/types/Story.types";
-import {imageUrl} from "@/utils/Image.Utils";
+const storiesApi = useStories();
 
-const storiesApi = useStories()
+const genreStore = useGenreStore();
+const {allAvailableGenres} = storeToRefs(genreStore);
 
 const searchQuery = ref<StorySearchQuery>({
   query: '',
@@ -60,15 +108,24 @@ const searchQuery = ref<StorySearchQuery>({
 const stories = ref<StoryWithoutSections[]>([])
 const isLoadingStories = ref(true);
 
-const onDebouncedInput = useDebounce(() => {
+const ageGroups = getAgeGroups();
+
+const debouncedFetchStories = debounce(() => {
   fetchStories(true);
-}, 400);
+}, 250);
+
+const onDebouncedQueryInput = () => {
+  debouncedFetchStories();
+};
+
+const onDebouncedFilterChange = () => {
+  debouncedFetchStories();
+};
 
 const fetchStories = async (reset: boolean): Promise<void> => {
   isLoadingStories.value = true;
-
   const fetchedStories = await storiesApi.getStoriesForSearchQuery(searchQuery.value)
-  stories.value = fetchedStories.stories
+  stories.value = fetchedStories.stories;
   isLoadingStories.value = false;
 }
 
