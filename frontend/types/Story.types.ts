@@ -1,3 +1,5 @@
+import type {Dictionary} from "@/types/Core.Types";
+
 export interface Section {
   id: number
   text: string
@@ -29,4 +31,10 @@ export type StoryWithoutSections = Omit<StoryWithSections, 'sections'>;
 export interface PaginatedStories {
   stories: StoryWithoutSections[],
   cursor: number
+}
+
+export enum AgeGroupTypes {
+  Kids = "KIDS",
+  Teens = "TEENS",
+  Adults = "ADULTS"
 }

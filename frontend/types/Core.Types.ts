@@ -3,3 +3,8 @@ export enum MomentFormat {
   DateDisplay =  "DD.MM.YYYY",
   UrlParam = "YYYY-MM-DD"
 }
+
+export interface Dictionary<T> {
+  value: T,
+  label: string
+}
