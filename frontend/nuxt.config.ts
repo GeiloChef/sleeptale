@@ -74,7 +74,9 @@ export default defineNuxtConfig({
         'backward-step',
         'bookmark',
         'home',
-        'magnifying-glass'
+        'magnifying-glass',
+        'calendar-days',
+        'user'
       ],
     },
     component: 'Icon',
