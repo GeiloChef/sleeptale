@@ -493,6 +493,7 @@ export class StoryService {
           imageUrl: story.imageUrl,
           ageGroup: story.ageGroup,
           genre: story.genre,
+          scheduledAt: story.scheduledAt,
           details: [translation],
         };
       }),
