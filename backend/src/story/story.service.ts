@@ -454,6 +454,9 @@ export class StoryService {
             : {}),
         ...(genre.length > 0 ? { genre: { key: { in: genre } } } : {}),
         ...(ageGroup.length > 0 ? { ageGroup: { in: ageGroup } } : {}),
+        scheduledAt: {
+          not: null,
+        },
       },
       include: {
         genre: true,
