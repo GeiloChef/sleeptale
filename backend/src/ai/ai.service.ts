@@ -29,39 +29,6 @@ export class AiService {
     });
   }
 
-  async generateStory(): Promise<{
-    title: string;
-    sections: string[];
-    description: string;
-  }> {
-    const prompt = `Erstelle eine kinderfreundliche Geschichte. Dir ist überlassen worum es geht und wie sie aufgebaut ist.
-    Es sollte sich als gute Nacht Geschichte eignen.
-    Die Geschichte soll aus 6–10 kurzen Abschnitten bestehen, jeder Abschnitt ca. 4-6 Sätze. Antworte als JSON im folgenden Format:
-
-    {
-      "title": "Der Titel",
-      "description": "A small teasing introduction",
-      "sections": [
-        "Abschnitt 1",
-        "Abschnitt 2",
-        ...
-      ]
-    }`;
-
-    const completion = await this.openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }],
-    });
-
-    const content = completion.choices[0].message.content;
-
-    try {
-      return JSON.parse(content || '');
-    } catch (err) {
-      throw new Error('Antwort konnte nicht gelesen werden.');
-    }
-  }
-
   buildStoryPrompt(ageGroup: string, genre: StoryGenre): string {
     const ageBasedPrompt =
       AGE_GROUP_PROMPTS[ageGroup] ?? 'Erstelle eine Kurzgeschichte.';
@@ -120,8 +87,6 @@ export class AiService {
     }
   }
 
-  async createNewStory(ageGroup: StoryAgeGroup, genre?: StoryGenre) {}
-
   async generateCoverImageForStory(title: string): Promise<string> {
     const prompt = `Ein kindgerechtes, beruhigendes Bild für die Gute-Nacht-Geschichte "${title}". 
     Füge keinesfalls Text in das Bild ein. Nutze angenehme Farben und halte das Bild Kinderfreundlich.`;
@@ -130,7 +95,7 @@ export class AiService {
       prompt,
       model: 'dall-e-3',
       n: 1,
-      size: '1024x1024',
+      size: '1792x1024',
     });
 
     const imageUrl = imageResponse.data[0]?.url;
