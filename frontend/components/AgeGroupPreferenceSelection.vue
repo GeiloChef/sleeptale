@@ -30,7 +30,7 @@
             {{ ageGroup.data.name }}
           </span>
           <span>
-            {{ ageGroup.data.ageRange }} {{ $t('year') }}
+            {{ ageGroup.data.ageRange }} {{ $t('year', 2) }}
           </span>
         </div>
       </div>
