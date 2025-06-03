@@ -110,7 +110,7 @@ onUnmounted((): void => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .p-popover::before, .p-popover::after {
   display: none;
 }
