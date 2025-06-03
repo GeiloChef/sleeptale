@@ -77,7 +77,8 @@ export default defineNuxtConfig({
         'home',
         'magnifying-glass',
         'calendar-days',
-        'user'
+        'user',
+        'circle-info'
       ],
     },
     component: 'Icon',

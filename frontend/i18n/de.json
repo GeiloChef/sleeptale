@@ -1,5 +1,7 @@
 {
   "age-group": "Altersgruppe",
+  "age-group-explanation": "Die Auswahl hier beeinflusst, welche Geschichte als 'Geschichte des Tages' vorgeschlagen wird. Sie können dennoch alle anderen Geschichten auch lesen.",
+  "age-group-preference": "Altersgruppe",
   "age-groups": {
     "adults": "Erwachsene",
     "kids": "Kinder",
@@ -29,7 +31,6 @@
     "supernatural": "Übernatürlich",
     "thriller": "Thriller"
   },
-  "select-a-language": "Wähle eine Sprache",
   "home": "Home",
   "new-story": "Neue Geschichte | Neue Geschichten",
   "next-page": "Nächste Seite",
@@ -39,6 +40,7 @@
   "read-book": "Story lesen",
   "read-now": "Jetzt lesen",
   "search-story": "Geschichte suchen",
+  "select-a-language": "Wähle eine Sprache",
   "select-genre": "Genre auswählen",
   "story-for-today": "Heutige Geschichte",
   "story-of-the-day": "Geschichte des Tages",
