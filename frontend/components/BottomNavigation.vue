@@ -35,6 +35,7 @@ const navigationItems = [
   {
     label: t('profile'),
     icon: 'user',
+    callback: () => {navigateByRouteName('user')}
   },
 ]
 </script>
