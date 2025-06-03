@@ -15,7 +15,8 @@ export default defineNuxtConfig({
     }
   },
   css: [
-    '@/assets/css/main.scss'
+    '@/assets/css/main.scss',
+    '@/node_modules/flag-icons/css/flag-icons.min.css'
   ],
   modules: [
     '@nuxt/eslint',

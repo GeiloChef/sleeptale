@@ -11,7 +11,7 @@ export class User {
     return this.language;
   }
 
-  setUserLanguage(language: Language): void {
+  public setUserLanguage(language: Language): void {
     console.log('set language');
     const { locale } = useI18n()
     const switchLocalePath = useSwitchLocalePath()

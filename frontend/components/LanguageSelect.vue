@@ -2,10 +2,18 @@
   <Select
       v-model="user"
       :options="availableLanguages"
+      optionLabel="label"
       :placeholder="$t('select-a-language')"
       @update:modelValue="switchLanguage">
+    <template #value="language">
+      <div class="flex items-center gap-2">
+        <FlagIcon :flag-code="language.value.flagCode"/>
+        <div>{{ language.value.label }}</div>
+      </div>
+    </template>
     <template #option="language">
-      <div class="flex items-center">
+      <div class="flex items-center gap-2">
+        <FlagIcon :flag-code="language.option.flagCode"/>
         <div>{{ language.option.label }}</div>
       </div>
     </template>
