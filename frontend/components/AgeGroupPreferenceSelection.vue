@@ -12,11 +12,14 @@
       </Popover>
     </div>
     <Carousel
+        ref="AgeGroupCarousel_Ref"
+        :page="currentPage"
         :value="ageGroups"
         :numVisible="1"
         :numScroll="1"
         circular
-        orientation="horizontal">
+        orientation="horizontal"
+        @update:page="setNewUserGroup">
     <template #item="ageGroup">
       <div class="flex flex-col border border-white rounded-xl overflow-hidden">
         <Image
@@ -27,7 +30,7 @@
             {{ ageGroup.data.name }}
           </span>
           <span>
-            {{ ageGroup.data.ageRange }} {{ $t('jahre') }}
+            {{ ageGroup.data.ageRange }} {{ $t('year') }}
           </span>
         </div>
       </div>
@@ -37,10 +40,14 @@
 </template>
 
 <script setup lang="ts">
-
   import {AgeGroupTypes} from "@/types/Story.types";
 
   const {t} = useI18n();
+
+  const userStore = useUserStore();
+  const { user } = storeToRefs(userStore);
+
+  const currentPage = ref(0);
 
   const ageGroups = ref([
     {
@@ -69,4 +76,17 @@
     console.log(event);
     AgeGroupDetails_Ref.value.toggle(event);
   }
+
+  const setNewUserGroup = (index: number): void => {
+    console.log(index)
+    user.value.setUserAgeGroup(ageGroups.value[index].id);
+  }
+
+  const AgeGroupCarousel_Ref = ref();
+
+  onMounted((): void => {
+    if (user.value.getUserAgeGroup()) {
+      currentPage.value = ageGroups.value.findIndex(group => group.id === user.value.getUserAgeGroup());
+    }
+  });
 </script>
