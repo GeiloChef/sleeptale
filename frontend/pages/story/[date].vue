@@ -31,7 +31,7 @@
       </Carousel>
     </div>
     <div class="flex-shrink-0">
-      <AudioPlayer />
+      <AudioPlayer v-if="selectedStory.id" />
     </div>
   </div>
 </template>
