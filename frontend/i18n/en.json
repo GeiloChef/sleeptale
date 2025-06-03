@@ -3,11 +3,13 @@
   "age-group-preference": "",
   "daily-story": "",
   "home": "",
+  "language": "",
   "new-story": "",
   "no-stories-for-search-term": "",
   "profile": "",
   "read-now": "",
   "search-story": "",
   "story-for-today": "",
-  "test": "Testing..."
+  "test": "Testing...",
+  "user-settings": ""
 }

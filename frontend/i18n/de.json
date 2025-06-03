@@ -32,6 +32,7 @@
     "thriller": "Thriller"
   },
   "home": "Home",
+  "language": "Sprache",
   "new-story": "Neue Geschichte | Neue Geschichten",
   "next-page": "Nächste Seite",
   "no-stories-for-search-term": "Es wurde keine passende Geschichte gefunden.",
@@ -44,5 +45,6 @@
   "select-genre": "Genre auswählen",
   "story-for-today": "Heutige Geschichte",
   "story-of-the-day": "Geschichte des Tages",
-  "test": "Testing..."
+  "test": "Testing...",
+  "user-settings": "Einstellungen"
 }
