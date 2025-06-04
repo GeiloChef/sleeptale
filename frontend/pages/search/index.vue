@@ -64,7 +64,7 @@
           v-for="story in stories"
           :key="story.id"
           class="flex flex-col gap-2"
-          @click="navigateToStoryPage(moment(story.scheduledAt).format(MomentFormat.DateUrl))">
+          @click="openStory(story)">
         <div class="rounded-xl overflow-hidden">
           <Image
               v-if="story.imageUrl"
@@ -128,6 +128,14 @@ const fetchStories = async (reset: boolean): Promise<void> => {
   const fetchedStories = await storiesApi.getStoriesForSearchQuery(searchQuery.value)
   stories.value = fetchedStories.stories;
   isLoadingStories.value = false;
+}
+
+const openStory = (story: StoryWithoutSections): void => {
+  navigateToStoryPage({
+    date: moment(story.scheduledAt).format(MomentFormat.DateUrl),
+    ageGroup: story.ageGroup,
+    id: story.id
+  });
 }
 
 onMounted(async (): Promise<void> => {

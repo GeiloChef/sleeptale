@@ -1,11 +1,20 @@
-import type {Section, StoryWithSections} from "@/types/Story.types";
+import type {Section, StoryPageNavigationParams, StoryWithSections} from "@/types/Story.types";
 import type {Moment} from "moment";
 import {type Dictionary, MomentFormat} from "@/types/Core.Types";
 import {navigateByRouteName} from "@/utils/Navigation.Utils";
 import {AgeGroupTypes} from "@/types/Story.types";
 
-export const navigateToStoryPage= (date: Moment): void => {
-  navigateByRouteName('story-date', { date: date })
+export const navigateToStoryPage = (navigationParams: StoryPageNavigationParams): void => {
+  let query: Record<string, string | number | boolean | undefined> = {
+    id: navigationParams.id,
+    ageGroup: navigationParams.ageGroup
+  };
+
+  query = Object.fromEntries(
+    Object.entries(query).filter(([_, value]) => value !== undefined)
+  );
+
+  navigateByRouteName('story-date', { date: navigationParams.date }, query)
 }
 
 export const createDefaultStory = (): StoryWithSections => {

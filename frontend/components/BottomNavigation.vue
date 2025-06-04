@@ -30,7 +30,7 @@ const navigationItems = [
   {
     label: t('daily-story'),
     icon: 'calendar-days',
-    callback: () => {navigateToStoryPage(moment().format(MomentFormat.DateUrl))}
+    callback: () => {navigateToStoryPage(moment().format(MomentFormat.DateUrl),undefined, useUserStore().user.getUserAgeGroup)}
   },
   {
     label: t('profile'),

@@ -43,6 +43,7 @@ import {MomentFormat} from "@/types/Core.Types";
 import {useRoute} from "nuxt/app";
 import {imageUrl} from "@/utils/Image.Utils";
 import AudioPlayer from "@/components/partials/AudioPlayer.vue";
+import {AgeGroupTypes} from "@/types/Story.types";
 
 definePageMeta({
   layout: 'story',
@@ -59,7 +60,11 @@ const StorySectionCarousel_Ref = ref();
 
 onMounted(async (): Promise<void> => {
   if (route.params.date) {
-    storyStore.selectedStory = await storyStore.fetchStoryByDate(moment(route.params.date, MomentFormat.DateUrl));
+    storyStore.selectedStory = await storyStore.fetchStoryByDate(
+        moment(route.params.date, MomentFormat.DateUrl),
+        route.query.ageGroup as AgeGroupTypes ?? AgeGroupTypes.Kids,
+        route.query.id as string ?? undefined
+    );
   }
 })
 </script>

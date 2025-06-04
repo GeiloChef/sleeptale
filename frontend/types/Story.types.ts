@@ -1,5 +1,3 @@
-import type {Dictionary} from "@/types/Core.Types";
-
 export interface Section {
   id: number
   text: string
@@ -15,6 +13,7 @@ export interface StoryWithSections {
   imageUrl?: string | null
   createdAt: string
   scheduledAt?: string | null
+  ageGroup: AgeGroupTypes
   sections: Section[]
 }
 
@@ -37,4 +36,10 @@ export enum AgeGroupTypes {
   Kids = "KIDS",
   Teens = "TEENS",
   Adults = "ADULTS"
+}
+
+export interface StoryPageNavigationParams {
+  date: string;
+  id?: string | number;
+  ageGroup: AgeGroupTypes
 }
