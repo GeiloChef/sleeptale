@@ -2,24 +2,16 @@
   <Menubar class="flex menubar">
     <template #start>
       <Button
+          v-if="showBackButton"
           type="button"
-          @click="toggleMenu"
+          @click="goBack"
           aria-haspopup="true"
+          severity="secondary"
           aria-controls="overlay_menu">
           <Icon
-              icon="bars"
+              icon="arrow-left"
               size="sm" />
       </Button>
-
-      <Menu
-          ref="Menu_Ref"
-          id="overlay_menu"
-          :model="items"
-          :popup="true">
-        <template #itemicon="{ item }">
-          <Icon :icon="item.icon" />
-        </template>
-      </Menu>
     </template>
 
     <template #end>
@@ -35,41 +27,20 @@
 </template>
 
 <script setup lang="ts">
+import { navigateByRouteName } from "@/utils/Navigation.Utils";
 
-import {navigateToStoryPage} from "@/utils/Story.Utils";
-import {MomentFormat} from "@/types/Core.Types";
-import {navigateByRouteName} from "@/utils/Navigation.Utils";
+const props = defineProps({
+  showBackButton: {
+    type: Boolean,
+    required: true
+  },
+});
 
 const router = useRouter();
-const Menu_Ref = ref();
 
-const toggleMenu = (event: Event): void => {
-  Menu_Ref.value.toggle(event);
+const goBack = (): void => {
+  router.back();
 }
-
-const items = ref([
-  {
-    label: $t('home'),
-    icon: 'home',
-    command: () => {
-      navigateByRouteName('index')
-    }
-  },
-  {
-    label: $t('story-of-the-day'),
-    icon: 'book-open',
-    command: () => {
-      navigateToStoryPage(moment().format(MomentFormat.DateUrl));
-    }
-  },
-  {
-    label: $t('search'),
-    icon: 'magnifying-glass',
-    command: () => {
-      navigateByRouteName('search')
-    }
-  },
-]);
 </script>
 
 <style lang="scss" scoped>

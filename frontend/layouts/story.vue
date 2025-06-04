@@ -1,7 +1,7 @@
 <template>
   <div class="app-container flex flex-col h-screen max-w-screen">
     <header class="header">
-      <AppHeader />
+      <AppHeader show-back-button />
     </header>
 
     <aside>

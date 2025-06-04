@@ -78,7 +78,8 @@ export default defineNuxtConfig({
         'magnifying-glass',
         'calendar-days',
         'user',
-        'circle-info'
+        'circle-info',
+        'arrow-left'
       ],
     },
     component: 'Icon',
