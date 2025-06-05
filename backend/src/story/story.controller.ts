@@ -49,7 +49,7 @@ export class StoryController {
     }
   }
 
-  @Get('/by-id/:id')
+  @Get('/id/:id')
   async getById(
     @Param('id') id: string | number,
     @Headers('accept-language') acceptLanguage?: string,
