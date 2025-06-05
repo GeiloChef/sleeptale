@@ -175,6 +175,38 @@ export class StoryService {
 
   /**
    * Fetch story from database by id
+   * @param id
+   * @param language
+   */
+  async prepareStoryByIdForFrontend(
+    id: number,
+    language: string,
+  ): Promise<StoryWithSectionsDto> {
+    const storyById = await this.prisma.story.findFirst({
+      where: {
+        id: id,
+      },
+      include: {
+        sections: {
+          where: {
+            language: { in: [language, FALLBACK_LANGUAGE] },
+          },
+          orderBy: { order: 'asc' },
+        },
+        details: {
+          where: {
+            language: { in: [language, FALLBACK_LANGUAGE] },
+          },
+        },
+        genre: true,
+      },
+    });
+
+    return this.prepareStoryForFrontend(storyById, language);
+  }
+
+  /**
+   * Fetch story from database by date
    * @param date
    * @param language
    */

@@ -6,6 +6,7 @@ import {
   BadRequestException,
   Headers,
   Body,
+  Param,
 } from '@nestjs/common';
 import { StoryService } from './story.service';
 import { getLanguageFromHeader } from '../common/utils/language.utils';
@@ -38,6 +39,26 @@ export class StoryController {
 
     try {
       return await this.storiesService.findStoryByDate(date, language);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Get('/by-id/:id')
+  async getById(
+    @Param('id') id: string | number,
+    @Headers('accept-language') acceptLanguage?: string,
+  ) {
+    if (isNaN(Number(id))) {
+      throw new BadRequestException('Id ist keine Nummer');
+    }
+
+    try {
+      const language = getLanguageFromHeader(acceptLanguage);
+      return await this.storiesService.prepareStoryByIdForFrontend(
+        Number(id),
+        language,
+      );
     } catch (error) {
       throw new BadRequestException(error.message);
     }
