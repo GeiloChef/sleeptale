@@ -212,6 +212,7 @@ export class StoryService {
    */
   async findStoryByDate(
     date: Date,
+    ageGroup: StoryAgeGroup,
     language: string,
   ): Promise<StoryWithSectionsDto> {
     const inputDate = new Date(date);
@@ -226,6 +227,7 @@ export class StoryService {
     const existingStory = await this.prisma.story.findFirst({
       where: {
         scheduledAt: formattedDate,
+        ageGroup: ageGroup,
       },
       include: {
         sections: {

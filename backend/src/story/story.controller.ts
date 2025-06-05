@@ -28,6 +28,7 @@ export class StoryController {
   @Get('/by-date')
   async getByDate(
     @Query('date') dateStr: string,
+    @Query('ageGroup') ageGroup: StoryAgeGroup,
     @Headers('accept-language') acceptLanguage?: string,
   ) {
     const date = new Date(dateStr);
@@ -38,7 +39,11 @@ export class StoryController {
     }
 
     try {
-      return await this.storiesService.findStoryByDate(date, language);
+      return await this.storiesService.findStoryByDate(
+        date,
+        ageGroup,
+        language,
+      );
     } catch (error) {
       throw new BadRequestException(error.message);
     }
