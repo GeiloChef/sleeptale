@@ -1,3 +1,5 @@
+import type {Story} from "@/types/classes/Story.Class";
+
 export interface Section {
   id: number
   text: string
@@ -28,7 +30,7 @@ export interface StorySearchQuery {
 export type StoryWithoutSections = Omit<StoryWithSections, 'sections'>;
 
 export interface PaginatedStories {
-  stories: StoryWithoutSections[],
+  stories: Story[],
   cursor: number
 }
 
@@ -39,7 +41,7 @@ export enum AgeGroupTypes {
 }
 
 export interface StoryPageNavigationParams {
-  date: string;
+  date?: string;
   id?: string | number;
-  ageGroup: AgeGroupTypes
+  ageGroup?: AgeGroupTypes
 }

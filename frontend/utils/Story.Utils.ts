@@ -7,14 +7,15 @@ import {AgeGroupTypes} from "@/types/Story.types";
 export const navigateToStoryPage = (navigationParams: StoryPageNavigationParams): void => {
   let query: Record<string, string | number | boolean | undefined> = {
     id: navigationParams.id,
-    ageGroup: navigationParams.ageGroup
+    ageGroup: navigationParams.ageGroup,
+    date: navigationParams.date
   };
 
   query = Object.fromEntries(
     Object.entries(query).filter(([_, value]) => value !== undefined)
   );
 
-  navigateByRouteName('story-date', { date: navigationParams.date }, query)
+  navigateByRouteName('story-date', {}, query)
 }
 
 export const createDefaultStory = (): StoryWithSections => {

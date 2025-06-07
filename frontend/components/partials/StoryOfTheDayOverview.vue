@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4" @click="openStory">
     <h2 class="story-section-headline">{{ $t('story-of-the-day') }}</h2>
     <div class="flex flex-col gap-2 items-center">
       <div class="rounded-2xl overflow-hidden">
@@ -25,4 +25,7 @@ import {imageUrl} from "@/utils/Image.Utils";
 
 const storyStore = useStoryStore();
 const { storyOfTheDay } = storeToRefs(storyStore);
+
+const openStory = (): void => {
+}
 </script>

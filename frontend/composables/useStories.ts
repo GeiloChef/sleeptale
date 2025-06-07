@@ -7,11 +7,12 @@ import type {
 } from "@/types/Story.types";
 import {mapStoryApiToDomainWithSections} from "@/utils/mappers/Story.Mapper";
 import {AgeGroupTypes} from "@/types/Story.types";
+import { Story } from "@/types/classes/Story.Class";
 
 export const useStories = () => {
   const { locale } = useI18n()
   const apiBase = useRuntimeConfig().public.apiBase || 'http://localhost:4000';
-  const getStoryByDate = async (date: string, ageGroup: AgeGroupTypes): Promise<StoryWithSections> => {
+  const getStoryByDate = async (date: string, ageGroup: AgeGroupTypes): Promise<Story> => {
     const { data, error } = await useFetch(`${apiBase}/stories/by-date?date=${date}&age-group=${ageGroup}`, {
       headers: {
         'Accept-Language': locale.value,
@@ -19,10 +20,14 @@ export const useStories = () => {
     });
 
     if (error.value) throw error.value
-    return mapStoryApiToDomainWithSections(data.value as StoryWithSections);
+
+    const story = new Story();
+    story.setValueFromStoryWithSections(data.value as StoryWithSections)
+
+    return story;
   }
 
-  const getStoryById = async (id: string | number): Promise<StoryWithSections> => {
+  const getStoryById = async (id: string | number): Promise<Story> => {
     const { data, error } = await useFetch(`${apiBase}/stories/id/${id}`, {
       headers: {
         'Accept-Language': locale.value,
@@ -30,7 +35,11 @@ export const useStories = () => {
     });
 
     if (error.value) throw error.value
-    return mapStoryApiToDomainWithSections(data.value as StoryWithSections);
+
+    const story = new Story();
+    story.setValueFromStoryWithSections(data.value as StoryWithSections)
+
+    return story;
   }
 
   const getStory = async (routeParams: StoryPageNavigationParams): Promise<StoryWithSections> => {
@@ -41,7 +50,7 @@ export const useStories = () => {
     }
   }
 
-  const getAllAvailableStories = async (): Promise<StoryWithoutSections[]> => {
+  const getAllAvailableStories = async (): Promise<Story[]> => {
     const { data , error } = await useFetch<StoryWithoutSections[]>(`${apiBase}/stories/all`, {
       headers: {
         'Accept-Language': locale.value,
@@ -49,10 +58,21 @@ export const useStories = () => {
     });
 
     if (error.value || !data.value) throw error.value
-    return data.value;
+
+    const stories: Story[] = [];
+
+    (data.value as StoryWithSections[]).forEach((storyFromBackend) => {
+      const story: Story = new Story();
+
+      story.setValueFromStoryWithSections(storyFromBackend);
+
+      stories.push(story);
+    })
+
+    return stories;
   }
 
-  const getByDate = async (date: string) => {
+  const getByDate = async (date: string): Promise<Story> => {
     const { data, error } = await useFetch(`/stories/by-date?date=${date}`, {
       headers: {
         'Accept-Language': locale.value,
@@ -60,7 +80,11 @@ export const useStories = () => {
     });
 
     if (error.value) throw error.value
-    return data.value
+
+    const story = new Story();
+    story.setValueFromStoryWithSections(data.value as StoryWithSections)
+
+    return story;
   }
 
   const getTextToSpeechForSection = async (storyId: number, sectionId: number): Promise<string> => {
@@ -83,7 +107,16 @@ export const useStories = () => {
       method: 'POST'
     })
     if (error.value) throw error.value
-    return data.value as PaginatedStories
+    const paginatedStories = data.value as PaginatedStories;
+
+    paginatedStories.stories = paginatedStories.stories.map((storyFromBackend) => {
+      const story = new Story();
+      story.setValueFromStoryWithSections(storyFromBackend);
+
+      return story
+    });
+
+    return paginatedStories;
   }
 
   return {
