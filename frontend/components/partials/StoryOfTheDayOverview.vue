@@ -27,5 +27,6 @@ const storyStore = useStoryStore();
 const { storyOfTheDay } = storeToRefs(storyStore);
 
 const openStory = (): void => {
+  storyOfTheDay.value.openStoryPage();
 }
 </script>

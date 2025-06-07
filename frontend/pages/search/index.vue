@@ -64,7 +64,7 @@
           v-for="story in stories"
           :key="story.id"
           class="flex flex-col gap-2"
-          @click="openStory(story)">
+          @click="story.openStoryPage()">
         <div class="rounded-xl overflow-hidden">
           <Image
               v-if="story.imageUrl"
@@ -87,11 +87,12 @@
 </template>
 
 <script setup lang="ts">
-import {type StorySearchQuery, type StoryWithoutSections} from "@/types/Story.types";
+import { type StorySearchQuery } from "@/types/Story.types";
 import { imageUrl } from "@/utils/Image.Utils";
 import {debounce} from "lodash-es";
 import {getAgeGroups} from "@/utils/Story.Utils";
 import {MomentFormat} from "@/types/Core.Types";
+import  {Story} from "@/types/classes/Story.Class";
 
 const storiesApi = useStories();
 
@@ -106,7 +107,7 @@ const searchQuery = ref<StorySearchQuery>({
   cursor: 0
 });
 
-const stories = ref<StoryWithoutSections[]>([])
+const stories = ref<Story[]>([])
 const isLoadingStories = ref(true);
 
 const ageGroups = getAgeGroups();
@@ -128,14 +129,6 @@ const fetchStories = async (reset: boolean): Promise<void> => {
   const fetchedStories = await storiesApi.getStoriesForSearchQuery(searchQuery.value)
   stories.value = fetchedStories.stories;
   isLoadingStories.value = false;
-}
-
-const openStory = (story: StoryWithoutSections): void => {
-  navigateToStoryPage({
-    date: moment(story.scheduledAt).format(MomentFormat.DateUrl),
-    ageGroup: story.ageGroup,
-    id: story.id
-  });
 }
 
 onMounted(async (): Promise<void> => {

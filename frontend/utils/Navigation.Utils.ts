@@ -12,6 +12,8 @@ export const navigateByRouteName = async (
     params: params ?? {}
   });
 
+  console.log(routeName, params, name);
+
   await navigateTo({
     path: name,
     query: query ?? {}

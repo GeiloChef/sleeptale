@@ -15,7 +15,7 @@ export const navigateToStoryPage = (navigationParams: StoryPageNavigationParams)
     Object.entries(query).filter(([_, value]) => value !== undefined)
   );
 
-  navigateByRouteName('story-date', {}, query)
+  navigateByRouteName('story', {}, query)
 }
 
 export const createDefaultStory = (): StoryWithSections => {

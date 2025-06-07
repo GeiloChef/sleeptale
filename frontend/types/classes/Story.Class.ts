@@ -1,5 +1,6 @@
 import type {Section, StoryWithSections} from "@/types/Story.types";
 import {AgeGroupTypes} from "@/types/Story.types";
+import {MomentFormat} from "@/types/Core.Types";
 
 export class Story implements StoryWithSections {
   ageGroup: AgeGroupTypes;
@@ -34,5 +35,17 @@ export class Story implements StoryWithSections {
     if (storyWithSections.sections) {
       this.sections = storyWithSections.sections.sort((a, b) => a.order - b.order);
     }
+  }
+
+  get formattedDateForRoute(): string {
+    return moment(this.scheduledAt).format(MomentFormat.DateUrl)
+  }
+
+  public openStoryPage(): void {
+    navigateToStoryPage({
+      date: this.formattedDateForRoute,
+      id: this.id,
+      ageGroup: this.ageGroup
+    });
   }
 }
