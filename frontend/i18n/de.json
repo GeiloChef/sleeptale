@@ -32,9 +32,16 @@
     "thriller": "Thriller"
   },
   "home": "Home",
+  "initial-setup": {
+    "age-group-selection": "Hier kannst du deine preferierte Altersgruppe für die Geschichten festlegen. Anhand dieser Altersgruppe bekommst du deine täglichen Geschichten vorgeschlagen. Du kannst die Auswahl jederzeit ändern.",
+    "headline": "Preferenzen festlegen",
+    "language-selection": "Lege die Sprache fest, in der du die Geschichten hören oder lesen möchtest. Die Geschichten sind in allen Sprachen dieselben und werden übersetzt. Du kannst die Sprache jederzeit in den Einstellungen umstellen."
+  },
   "language": "Sprache",
+  "let-s-go": "Los geht's!",
   "new-story": "Neue Geschichte | Neue Geschichten",
   "next-page": "Nächste Seite",
+  "next-step": "Nächster Schritt",
   "no-stories-for-search-term": "Es wurde keine passende Geschichte gefunden.",
   "previous-page": "Vorherige Seite",
   "profile": "Profil",

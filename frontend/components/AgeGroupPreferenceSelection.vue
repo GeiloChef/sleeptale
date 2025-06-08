@@ -78,7 +78,7 @@
   }
 
   const setNewUserGroup = (index: number): void => {
-    console.log(index)
+    console.log(user.value)
     user.value.setUserAgeGroup(ageGroups.value[index].id);
   }
 

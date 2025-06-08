@@ -3,8 +3,15 @@
   "age-group-preference": "",
   "daily-story": "",
   "home": "",
+  "initial-setup": {
+    "age-group-selection": "",
+    "headline": "",
+    "language-selection": ""
+  },
   "language": "",
+  "let-s-go": "",
   "new-story": "",
+  "next-step": "",
   "no-stories-for-search-term": "",
   "profile": "",
   "read-now": "",

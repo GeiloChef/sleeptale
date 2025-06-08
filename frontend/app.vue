@@ -1,5 +1,6 @@
 <template>
   <NuxtLayout>
+    <InitialSetupDialog />
     <NuxtPage />
   </NuxtLayout>
 </template>

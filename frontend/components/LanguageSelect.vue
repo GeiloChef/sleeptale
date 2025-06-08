@@ -4,6 +4,7 @@
       :options="availableLanguages"
       optionLabel="label"
       :placeholder="$t('select-a-language')"
+      class="w-full"
       @update:modelValue="switchLanguage">
     <template #value="language">
       <div class="flex items-center gap-2">
@@ -29,7 +30,7 @@ const { user } = storeToRefs(userStore)
 
 const availableLanguages = ref(getAvailableLanguages());
 
-const { locale, setLocale } = useI18n()
+const { setLocale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 
 

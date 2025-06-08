@@ -11,7 +11,7 @@
         <span class="text-lg italic">
           {{ $t('language') }}
         </span>
-      <LanguageSelect class="w-3/5" />
+      <LanguageSelect class="!w-3/5" />
       </div>
     </div>
   </div>
