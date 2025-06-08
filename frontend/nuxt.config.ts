@@ -26,7 +26,8 @@ export default defineNuxtConfig({
     "@vesp/nuxt-fontawesome",
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
-    './modules/moment'
+    './modules/moment',
+    'pinia-plugin-persistedstate/nuxt'
   ],
   moment: {
     locale: 'de' // oder 'es', 'fr', 'en-gb' etc.
@@ -73,13 +74,15 @@ export default defineNuxtConfig({
         'pause',
         'forward-step',
         'backward-step',
-        'bookmark',
         'home',
+        'bookmark',
         'magnifying-glass',
         'calendar-days',
         'user',
         'circle-info',
-        'arrow-left'
+        'arrow-left',
+        'language',
+        'book'
       ],
     },
     component: 'Icon',
