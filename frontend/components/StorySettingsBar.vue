@@ -35,7 +35,6 @@ const isStoryFavorite = computed((): boolean => {
 
 const onClickBookmark = (): void => {
   if (isStoryFavorite.value) {
-    console.log(isStoryFavorite.value);
     userStore.removeStoryFromFavorites(selectedStory.value.id);
   } else {
     userStore.addStoryAsFavorite(selectedStory.value.id)
