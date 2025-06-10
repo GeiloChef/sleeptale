@@ -46,3 +46,8 @@ export interface StoryPageNavigationParams {
   id?: string | number;
   ageGroup?: AgeGroupTypes
 }
+
+export interface StoryFavorites {
+  id: string | number;
+  addedAsFavoriteAt: number
+}

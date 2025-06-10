@@ -5,7 +5,13 @@
       <IncreaseFontSizeIcon @click="applicationStore.increaseFontSize" />
     </div>
 
-    <Icon icon="bookmark" />
+    <Icon
+      icon="bookmark"
+      :class="{
+        'text-green-500': isStoryFavorite,
+        'text-white': !isStoryFavorite
+      }"
+      @click="onClickBookmark" />
   </div>
 </template>
 
@@ -13,6 +19,26 @@
 import IncreaseFontSizeIcon from "@/components/icons/IncreaseFontSizeIcon.vue";
 import DecreaseFontSizeIcon from "@/components/icons/DecreaseFontSizeIcon.vue";
 import { useApplicationStore } from "@/stores/Application.Store";
+import {useUserStore} from "@/.nuxt/imports";
 
-const applicationStore = useApplicationStore()
+const applicationStore = useApplicationStore();
+
+const storyStore = useStoryStore();
+const { selectedStory } = storeToRefs(storyStore);
+
+const userStore = useUserStore();
+const { favoriteStories } = storeToRefs(userStore);
+
+const isStoryFavorite = computed((): boolean => {
+  return favoriteStories.value.some(fav => fav.id === selectedStory.value.id);
+});
+
+const onClickBookmark = (): void => {
+  if (isStoryFavorite.value) {
+    console.log(isStoryFavorite.value);
+    userStore.removeStoryFromFavorites(selectedStory.value.id);
+  } else {
+    userStore.addStoryAsFavorite(selectedStory.value.id)
+  }
+}
 </script>
