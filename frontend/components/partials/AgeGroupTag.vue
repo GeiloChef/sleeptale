@@ -26,18 +26,18 @@ const selectedAgeGroup = computed((): Dictionary<AgeGroupTypes> => {
 });
 
 const genreColorMap: Record<string, string> = {
-  kids: '--age-group-kids',
-  teens: '--age-group-teens',
-  adults: '--age-group-adults'
+  KIDS: '--age-group-kids',
+  TEENS: '--age-group-teens',
+  ADULTS: '--age-group-adults'
 };
 
 const ageGroupStyles = computed(() => {
-  const cssVarName = genreColorMap[props.genreKey];
+  const cssVarName = genreColorMap[props.ageGroup];
 
   if (cssVarName) {
     return {
       'background': `var(${cssVarName})`,
-      'color': `var(${cssVarName}-text)`
+      'color': 'white'
     };
   }
   return {};

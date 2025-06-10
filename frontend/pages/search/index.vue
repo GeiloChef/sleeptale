@@ -74,7 +74,12 @@
           <span class="font-bold">{{story.title}}</span>
           <span class="text-sm italic">{{story.description}}</span>
         </div>
-      <divider/>
+
+        <div class="flex flex-row gap-2 justify-start items-center right-4 bottom-2">
+          <AgeGroupTag :age-group="story.ageGroup" />
+          <GenreTag :genre-key="story.genre" />
+        </div>
+      <Divider/>
       </div>
     </div>
 
@@ -93,6 +98,8 @@ import {debounce} from "lodash-es";
 import {getAgeGroups} from "@/utils/Story.Utils";
 import {MomentFormat} from "@/types/Core.Types";
 import  {Story} from "@/types/classes/Story.Class";
+import AgeGroupTag from "@/components/partials/AgeGroupTag.vue";
+import GenreTag from "@/components/partials/GenreTag.vue";
 
 const storiesApi = useStories();
 

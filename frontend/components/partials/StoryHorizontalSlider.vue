@@ -14,6 +14,11 @@
                 :src="imageUrl(story.imageUrl)" />
           <span class="text-md font-bold">{{ story.title }}</span>
           <span class="text-sm text-gray-500">{{ story.description }}</span>
+
+          <div class="flex flex-col gap-2 justify-start items-center pb-2">
+            <AgeGroupTag class="self-start" :age-group="story.ageGroup" />
+            <GenreTag class="self-start" :genre-key="story.genre" />
+          </div>
         </div>
       </div>
     </div>
@@ -23,6 +28,8 @@
 <script setup lang="ts">
 import { imageUrl } from "@/utils/Image.Utils";
 import { toRefs } from "vue";
+import AgeGroupTag from "@/components/partials/AgeGroupTag.vue";
+import GenreTag from "@/components/partials/GenreTag.vue";
 
 const storyStore = useStoryStore();
 const { storyOfTheDay } = storeToRefs(storyStore);
