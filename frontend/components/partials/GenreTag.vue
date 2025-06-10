@@ -23,7 +23,7 @@ const props = defineProps({
 
 const selectedGenre = computed((): Genre => {
   return allAvailableGenres.value.find((genre) => genre.key === props.genreKey) ?? allAvailableGenres.value[0];
-})
+});
 
 const genreColorMap: Record<string, string> = {
   adventure: '--genre-adventure',

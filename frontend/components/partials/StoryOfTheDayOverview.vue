@@ -16,7 +16,8 @@
         </span>
       </div>
 
-      <div>
+      <div class="flex flex-row gap-2 items-center justify-start w-full">
+        <AgeGroupTag :age-group="storyOfTheDay.ageGroup" />
         <GenreTag :genre-key="storyOfTheDay.genre" />
       </div>
     </div>
@@ -27,6 +28,7 @@
 <script setup lang="ts">
 import {imageUrl} from "@/utils/Image.Utils";
 import GenreTag from "@/components/partials/GenreTag.vue";
+import AgeGroupTag from "@/components/partials/AgeGroupTag.vue";
 
 const storyStore = useStoryStore();
 const { storyOfTheDay } = storeToRefs(storyStore);
