@@ -11,6 +11,7 @@ export class Story implements StoryWithSections {
   scheduledAt: string | null;
   sections: Section[];
   title: string;
+  genre: string;
 
   constructor() {
     this.ageGroup = AgeGroupTypes.Kids;
@@ -21,6 +22,7 @@ export class Story implements StoryWithSections {
     this.scheduledAt = null;
     this.sections = [];
     this.title = 'New Story 1';
+    this.genre = 'feel-good'
   }
 
   public setValueFromStoryWithSections(storyWithSections: StoryWithSections): void {
@@ -31,6 +33,7 @@ export class Story implements StoryWithSections {
     this.imageUrl = storyWithSections.imageUrl ?? null;
     this.scheduledAt = storyWithSections.scheduledAt ?? null;
     this.title = storyWithSections.title;
+    this.genre = storyWithSections.genre;
 
     if (storyWithSections.sections) {
       this.sections = storyWithSections.sections.sort((a, b) => a.order - b.order);

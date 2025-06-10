@@ -16,8 +16,14 @@ export default defineNuxtConfig({
   },
   css: [
     '@/assets/css/main.scss',
+    '@/assets/css/_colors.scss',
     '@/node_modules/flag-icons/css/flag-icons.min.css'
   ],
+  styleResources: {
+    scss: [
+      '@/assets/css/_colors.scss'
+    ]
+  },
   modules: [
     '@nuxt/eslint',
     '@nuxtjs/i18n',
@@ -82,7 +88,26 @@ export default defineNuxtConfig({
         'circle-info',
         'arrow-left',
         'language',
-        'book'
+        'book',
+        'compass',
+        'bed',
+        'face-laugh-beam',
+        'heart-crack',
+        'biohazard',
+        'graduation-cap',
+        'dragon',
+        'face-smile-beam',
+        'receipt',
+        'landmark',
+        'skull-crossbones',
+        'magnifying-glass',
+        'feather-pointed',
+        'brain',
+        'heart',
+        'rocket',
+        'house-user',
+        'ghost',
+        'bolt',
       ],
     },
     component: 'Icon',

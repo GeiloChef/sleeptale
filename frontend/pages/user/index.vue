@@ -18,6 +18,5 @@
 </template>
 
 <script setup lang="ts">
-
 import LanguageSelect from "@/components/LanguageSelect.vue";
 </script>

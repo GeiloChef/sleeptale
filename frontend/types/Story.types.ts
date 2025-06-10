@@ -17,6 +17,7 @@ export interface StoryWithSections {
   scheduledAt?: string | null
   ageGroup: AgeGroupTypes
   sections: Section[]
+  genre: string;
 }
 
 export interface StorySearchQuery {

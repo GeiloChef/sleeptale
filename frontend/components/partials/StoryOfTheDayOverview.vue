@@ -8,12 +8,16 @@
             :src="imageUrl(storyOfTheDay.imageUrl)" />
       </div>
       <div class="flex flex-col gap-2">
-    <span class="text-xl">
-       {{ storyOfTheDay.title }}
-    </span>
+        <span class="text-xl">
+           {{ storyOfTheDay.title }}
+        </span>
         <span class="text-sm line-clamp-8 text-gray-500">
          {{ storyOfTheDay.description }}
         </span>
+      </div>
+
+      <div>
+        <GenreTag :genre-key="storyOfTheDay.genre" />
       </div>
     </div>
   </div>
@@ -22,6 +26,7 @@
 
 <script setup lang="ts">
 import {imageUrl} from "@/utils/Image.Utils";
+import GenreTag from "@/components/partials/GenreTag.vue";
 
 const storyStore = useStoryStore();
 const { storyOfTheDay } = storeToRefs(storyStore);
