@@ -2,7 +2,7 @@
   <Tag
     :style="genreStyles"
     class="text-white">
-    <Icon :icon="icon" class="text-white" />
+    <Icon :icon="icon" />
     <span>{{ $t(selectedGenre.label) }}</span>
   </Tag>
 </template>
