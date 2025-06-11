@@ -41,7 +41,7 @@ export const useStories = () => {
     return story;
   }
 
-  const getStory = async (routeParams: StoryPageNavigationParams): Promise<StoryWithSections> => {
+  const getStory = async (routeParams: StoryPageNavigationParams): Promise<Story> => {
     if (routeParams.id) {
       return await getStoryById(routeParams.id)
     } else {
