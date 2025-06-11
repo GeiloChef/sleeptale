@@ -12,6 +12,7 @@ import { StoryService } from './story.service';
 import { getLanguageFromHeader } from '../common/utils/language.utils';
 import { StoryAgeGroup, StoryGenre } from './types/story.types';
 import { Story } from '@prisma/client';
+import { FetchStoriesDto } from './dto/story.dto';
 
 @Controller('stories')
 export class StoryController {
@@ -87,6 +88,16 @@ export class StoryController {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  @Post('/bulk')
+  async getStoriesByIds(
+    @Body() body: FetchStoriesDto,
+    @Headers('accept-language') acceptLanguage?: string,
+  ) {
+    const language = getLanguageFromHeader(acceptLanguage);
+
+    return this.storiesService.getStoriesById(body.ids, language);
   }
 
   @Post('search')

@@ -51,8 +51,13 @@ export class StoryService {
   async prepareStoryForFrontend(
     story: StoryFromDatabase,
     language: string,
-  ): Promise<any> {
-    const translatedStory = await this.translateStory(story, language);
+    generateSections: boolean = true,
+  ): Promise<StoryWithSectionsDto> {
+    const translatedStory = await this.translateStory(
+      story,
+      language,
+      generateSections,
+    );
 
     return storyWithSectionsDtoMaker(translatedStory, language);
   }
@@ -174,6 +179,39 @@ export class StoryService {
   }
 
   /**
+   * Find stories by id in bulk.
+   * @param storyIds (string | number)[];
+   * @param language
+   */
+  async getStoriesById(
+    storyIds: number[],
+    language: string,
+  ): Promise<StoryWithSectionsDto[]> {
+    console.log(storyIds);
+    const foundStories = await this.prisma.story.findMany({
+      where: {
+        id: {
+          in: storyIds,
+        },
+      },
+      include: {
+        details: {
+          where: {
+            language: { in: [language, FALLBACK_LANGUAGE] },
+          },
+        },
+        genre: true,
+      },
+    });
+
+    return Promise.all(
+      foundStories.map((story) =>
+        this.prepareStoryForFrontend(story, language, false),
+      ),
+    );
+  }
+
+  /**
    * Fetch story from database by id
    * @param id
    * @param language
@@ -218,9 +256,9 @@ export class StoryService {
     const inputDate = new Date(date);
     const today = new Date();
 
-    if (inputDate > today) {
+    /*    if (inputDate > today) {
       throw new Error('Nur Daten bis einschließlich heute sind erlaubt.');
-    }
+    }*/
 
     const formattedDate = formatDate(inputDate);
 

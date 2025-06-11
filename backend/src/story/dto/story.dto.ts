@@ -68,3 +68,7 @@ export function storyWithoutSectionsDtoMaker(
     scheduledAt: story.scheduledAt ?? undefined,
   };
 }
+
+export class FetchStoriesDto {
+  ids: number[];
+}
