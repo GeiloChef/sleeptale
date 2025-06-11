@@ -67,9 +67,11 @@ onMounted(async (): Promise<void> => {
     );
   }
 
-  const isSelectedStoryAlreadyStarted = startedStories.value.find((startedStory) => startedStory.id === selectedStory.value.id);
+  const selectedStoryAlreadyStarted = startedStories.value.find((startedStory) => startedStory.id === selectedStory.value.id);
 
-  if (!isSelectedStoryAlreadyStarted) {
+  if (selectedStoryAlreadyStarted && selectedStoryAlreadyStarted.readStorySections.length) {
+    currentSectionIndex.value = selectedStoryAlreadyStarted.readStorySections.length - 1;
+  } else {
     storyStore.addStoryAsStarted(selectedStory.value);
   }
 })

@@ -58,3 +58,8 @@ export interface StartedStory {
   readStorySections: number[];
   startedAt: number
 }
+
+export interface FinishedStory {
+  id: number,
+  finishedAt: number,
+}

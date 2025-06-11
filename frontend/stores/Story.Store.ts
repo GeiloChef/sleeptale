@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import {useStories, useUserStore} from "@/.nuxt/imports";
 import type {Moment} from "moment";
 import {MomentFormat} from "@/types/Core.Types";
-import {AgeGroupTypes, type StartedStory} from "@/types/Story.types";
+import {AgeGroupTypes, type FinishedStory, type StartedStory} from "@/types/Story.types";
 import { Story } from "@/types/classes/Story.Class";
 
 export const useStoryStore = defineStore('storyStore', () => {
@@ -44,6 +44,7 @@ export const useStoryStore = defineStore('storyStore', () => {
   }
 
   const startedStories = ref<StartedStory[]>([]);
+  const finishedStories = ref<FinishedStory[]>([]);
 
   const markSectionOfStoryAsRead = (sectionIndex: number): void => {
     let startedStory: StartedStory | undefined = startedStories.value.find((startedStory) => startedStory.id === selectedStory.value.id)
@@ -52,24 +53,54 @@ export const useStoryStore = defineStore('storyStore', () => {
       startedStory = addStoryAsStarted(selectedStory.value)
     }
 
+    if (!startedStory) {
+      console.error('Could not create started story object');
+      return;
+    }
+
     const readSection = selectedStory.value.sections[sectionIndex];
 
     if (!startedStory.readStorySections.includes(readSection.id)) {
       startedStory.readStorySections.push(readSection.id);
     }
+
+    if (startedStory.readStorySections.length === startedStory.sections) {
+      addStoryAsFinished(selectedStory.value.id);
+    }
   }
 
-  const addStoryAsStarted = (story: Story): StartedStory => {
+  const addStoryAsStarted = (story: Story): StartedStory | undefined => {
+    const alreadyIsFinished = finishedStories.value.find((finishedStory) => finishedStory.id === storyId);
+
+    if (alreadyIsFinished) return undefined;
+
     const newlyStartedStory: StartedStory = {
       id: story.id,
       sections: story.sections.length,
       readStorySections: [story.sections[0].id],
-      startedAt: moment()
+      startedAt: moment().valueOf()
     }
 
     startedStories.value.push(newlyStartedStory);
 
     return newlyStartedStory;
+  }
+
+  const addStoryAsFinished = (storyId: number): FinishedStory => {
+    const newlyFinishedStory: FinishedStory = {
+      id: storyId,
+      finishedAt: moment().valueOf()
+    }
+
+    const alreadyIsFinished = finishedStories.value.find((finishedStory) => finishedStory.id === storyId);
+
+    if (!alreadyIsFinished) {
+      finishedStories.value.push(newlyFinishedStory);
+    }
+
+    startedStories.value = startedStories.value.filter((startedStory) => startedStory.id !== storyId);
+
+    return newlyFinishedStory;
   }
 
   return {
@@ -78,6 +109,7 @@ export const useStoryStore = defineStore('storyStore', () => {
     storyOfTheDay,
     currentSectionIndex,
     startedStories,
+    finishedStories,
     fetchStoryByDate,
     fetchAllStories,
     fetchTextToSpeechForStory,
@@ -88,6 +120,6 @@ export const useStoryStore = defineStore('storyStore', () => {
 }, {
   persist: {
     storage: piniaPluginPersistedstate.sessionStorage(),
-    pick: ['story', 'startedStories'],
+    pick: ['story', 'startedStories', 'finishedStories'],
   }
 });
