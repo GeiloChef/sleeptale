@@ -52,7 +52,7 @@ definePageMeta({
 const route = useRoute();
 
 const storyStore = useStoryStore();
-const { selectedStory, currentSectionIndex } = storeToRefs(storyStore);
+const { selectedStory, currentSectionIndex, startedStories } = storeToRefs(storyStore);
 
 const applicationStore = useApplicationStore();
 
@@ -65,6 +65,12 @@ onMounted(async (): Promise<void> => {
         route.query.ageGroup as AgeGroupTypes ?? AgeGroupTypes.Kids,
         route.query.id as string ?? undefined
     );
+  }
+
+  const isSelectedStoryAlreadyStarted = startedStories.value.find((startedStory) => startedStory.id === selectedStory.value.id);
+
+  if (!isSelectedStoryAlreadyStarted) {
+    storyStore.addStoryAsStarted(selectedStory.value);
   }
 })
 </script>

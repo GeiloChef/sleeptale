@@ -51,3 +51,10 @@ export interface StoryFavorites {
   id: string | number;
   addedAsFavoriteAt: number
 }
+
+export interface StartedStory {
+  id: number;
+  sections: number;
+  readStorySections: number[];
+  startedAt: number
+}
