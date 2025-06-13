@@ -72,7 +72,7 @@ export const useStoryStore = defineStore('storyStore', () => {
   }
 
   const addStoryAsStarted = (story: Story): StartedStory | undefined => {
-    const alreadyIsFinished = finishedStories.value.find((finishedStory) => finishedStory.id === storyId);
+    const alreadyIsFinished = finishedStories.value.find((finishedStory) => finishedStory.id === story.id);
 
     if (alreadyIsFinished) return undefined;
 
