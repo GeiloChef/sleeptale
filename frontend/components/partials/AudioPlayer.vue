@@ -20,15 +20,17 @@
         @click="toggleVolumeSliderPopover">
       <Icon icon="volume-high" size="md" />
     </button>
-    <Popover ref="VolumeSliderPopover_Ref">
-      <Slider
-          v-model="volume"
-          orientation="vertical"
-          @change="setVolume"
-          :min="1"
-          :max="100"
-          class="h-48" />
-    </Popover>
+      <Popover
+        ref="VolumeSliderPopover_Ref"
+        class="volume-slider-parent">
+        <Slider
+            v-model="volume"
+            orientation="vertical"
+            @change="setVolume"
+            :min="1"
+            :max="100"
+            class="h-48" />
+      </Popover>
   </div>
 </template>
 
@@ -110,8 +112,15 @@ onUnmounted((): void => {
 })
 </script>
 
-<style lang="scss" scoped>
-.p-popover::before, .p-popover::after {
-  display: none;
+<style lang="scss">
+
+.volume-slider-parent {
+  margin-left: -5px
 }
+
+
+.volume-slider-parent::before, .volume-slider-parent::after {
+  left: 50%;
+}
+
 </style>
