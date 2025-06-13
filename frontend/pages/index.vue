@@ -5,20 +5,21 @@
    </section>
    <Divider />
 
-   <section class="snap-start-container">
-    <StoryHorizontalSlider :title="$t('new-story', 2)" />
+   <section
+     v-show="startedStoriesList.length"
+     class="snap-start-container">
+    <StoryHorizontalSlider
+      :title="$t('started-story', 2)"
+      :stories="startedStoriesList" />
+    <Divider />
    </section>
-   <Divider />
-   <section class="snap-start-container">
-    <StoryHorizontalSlider :title="$t('new-story', 2)" />
-   </section>
-   <Divider />
-   <section class="snap-start-container">
-    <StoryHorizontalSlider :title="$t('new-story', 2)" />
-   </section>
-   <Divider />
-   <section class="snap-start-container">
-    <StoryHorizontalSlider :title="$t('new-story', 2)" />
+   <section
+     v-show="favoriteStoriesList.length"
+     class="snap-start-container">
+    <StoryHorizontalSlider
+      :title="$t('favorite', 2)"
+      :stories="favoriteStoriesList" />
+    <Divider />
    </section>
  </div>
 </template>
@@ -28,10 +29,16 @@
 import StoryOfTheDayOverview from "@/components/partials/StoryOfTheDayOverview.vue";
 import StoryHorizontalSlider from "@/components/partials/StoryHorizontalSlider.vue";
 
+const userStore = useUserStore();
+const { favoriteStoriesList } = storeToRefs(userStore);
+
 const storyStore = useStoryStore();
+const { startedStoriesList } = storeToRefs(storyStore);
 
 onMounted(async (): Promise<void> => {
   await storyStore.fetchStoryOfTheDay();
+  await storyStore.fetchInfoForStartedStories();
+  await userStore.fetchInfoForFavoriteStories();
 });
 </script>
 

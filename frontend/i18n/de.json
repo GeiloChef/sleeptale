@@ -10,6 +10,7 @@
   "all-stories": "Alle Geschichten",
   "daily-story": "Tägliche Geschichte",
   "end-story": "Story beenden",
+  "favorite": "Favorit | Favoriten",
   "genre": {
     "adventure": "Abenteuer",
     "bedtime": "Gute-Nacht",
@@ -50,6 +51,7 @@
   "search-story": "Geschichte suchen",
   "select-a-language": "Wähle eine Sprache",
   "select-genre": "Genre auswählen",
+  "started-story": "Angefangene Geschichte | Angefangene Geschichten",
   "story-for-today": "Heutige Geschichte",
   "story-of-the-day": "Geschichte des Tages",
   "test": "Testing...",

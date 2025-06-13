@@ -27,9 +27,10 @@
 
 <script setup lang="ts">
 import { imageUrl } from "@/utils/Image.Utils";
-import { toRefs } from "vue";
+import {type PropType, toRefs} from "vue";
 import AgeGroupTag from "@/components/partials/AgeGroupTag.vue";
 import GenreTag from "@/components/partials/GenreTag.vue";
+import type {Story} from "@/types/classes/Story.Class";
 
 const storyStore = useStoryStore();
 const { storyOfTheDay } = storeToRefs(storyStore);
@@ -39,11 +40,15 @@ const props = defineProps({
     type: String,
     required: true
   },
+  stories: {
+    type: Array as PropType<Story[]>,
+    required: false
+  }
 });
 
 const { title } = toRefs(props);
 
-const stories = computed(() => {
+/*const stories = computed(() => {
   return [
       storyOfTheDay.value,
       storyOfTheDay.value,
@@ -52,5 +57,5 @@ const stories = computed(() => {
       storyOfTheDay.value,
       storyOfTheDay.value,
   ]
-})
+})*/
 </script>

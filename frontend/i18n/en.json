@@ -2,6 +2,7 @@
   "age-group-explanation": "",
   "age-group-preference": "",
   "daily-story": "",
+  "favorite": "",
   "home": "",
   "initial-setup": {
     "age-group-selection": "",
@@ -16,6 +17,7 @@
   "profile": "",
   "read-now": "",
   "search-story": "",
+  "started-story": "",
   "story-for-today": "",
   "test": "Testing...",
   "user-settings": "",

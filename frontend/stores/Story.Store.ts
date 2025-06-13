@@ -7,13 +7,15 @@ import {AgeGroupTypes, type FinishedStory, type StartedStory} from "@/types/Stor
 import { Story } from "@/types/classes/Story.Class";
 
 export const useStoryStore = defineStore('storyStore', () => {
-  const { getStory, getAllAvailableStories, getTextToSpeechForSection } = useStories();
+  const { getStory, getAllAvailableStories, getTextToSpeechForSection, fetchStoriesInBulk } = useStories();
   const selectedStory = ref<Story>(new Story());
   const currentSectionIndex = ref<number>(0)
 
   const allAvailableStories = ref<Story[]>([]);
 
   const storyOfTheDay = ref<Story>(new Story());
+
+  const startedStoriesList = ref<Story[]>([]);
 
   const fetchStoryByDate = async (date: Moment, ageGroup: AgeGroupTypes, id?: string | number): Promise<Story> => {
     return await getStory({
@@ -103,19 +105,29 @@ export const useStoryStore = defineStore('storyStore', () => {
     return newlyFinishedStory;
   }
 
+  const fetchInfoForStartedStories = async (): Promise<void> => {
+    const startedStoryIds = startedStories.value.flatMap((story) => story.id);
+
+    if (startedStoryIds.length) {
+      startedStoriesList.value = await fetchStoriesInBulk(startedStoryIds);
+    }
+  }
+
   return {
     selectedStory,
     allAvailableStories,
     storyOfTheDay,
     currentSectionIndex,
     startedStories,
+    startedStoriesList,
     finishedStories,
     fetchStoryByDate,
     fetchAllStories,
     fetchTextToSpeechForStory,
     fetchStoryOfTheDay,
     setNewSectionIndex,
-    addStoryAsStarted
+    addStoryAsStarted,
+    fetchInfoForStartedStories
   }
 }, {
   persist: {
