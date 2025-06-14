@@ -16,7 +16,7 @@ export const useGenreStore = defineStore('genreStore', () => {
   }
 }, {
   persist: {
-    storage: piniaPluginPersistedstate.sessionStorage(),
+    storage: piniaPluginPersistedstate.localStorage(),
     pick: ['allAvailableGenres'],
   }
 });

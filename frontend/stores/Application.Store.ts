@@ -25,7 +25,7 @@ export const useApplicationStore = defineStore('applicationStore', () => {
   }
 }, {
   persist: {
-    storage: piniaPluginPersistedstate.sessionStorage(),
+    storage: piniaPluginPersistedstate.localStorage(),
     pick: ['fontSize'],
   }
 });

@@ -59,7 +59,7 @@ export const useUserStore = defineStore('userStore', () => {
 
 }, {
   persist: {
-    storage: piniaPluginPersistedstate.sessionStorage(),
+    storage: piniaPluginPersistedstate.localStorage(),
     pick: ['user', 'favoriteStories'],
   }
 });

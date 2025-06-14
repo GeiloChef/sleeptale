@@ -131,7 +131,7 @@ export const useStoryStore = defineStore('storyStore', () => {
   }
 }, {
   persist: {
-    storage: piniaPluginPersistedstate.sessionStorage(),
+    storage: piniaPluginPersistedstate.localStorage(),
     pick: ['story', 'startedStories', 'finishedStories'],
   }
 });
