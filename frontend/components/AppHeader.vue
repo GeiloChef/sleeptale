@@ -46,5 +46,6 @@ const goBack = (): void => {
 <style lang="scss" scoped>
 .menubar {
   font-size: 1.2rem;
+  @apply rounded-none border-x-0 border-t-0 border-b border-b-green-500
 }
 </style>
