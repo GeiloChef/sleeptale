@@ -443,6 +443,41 @@ export class StoryService {
     return section.text;
   }
 
+  async findSuggestedStoriesForUser(
+    ageGroup: StoryAgeGroup,
+    favoriteGenreIds: number[] | undefined,
+    excludedStoryIds: number[],
+    language: string,
+  ): Promise<StoryWithSectionsDto[]> {
+    const whereClause: any = {
+      ageGroup,
+      id: {
+        notIn: excludedStoryIds,
+      },
+    };
+
+    if (favoriteGenreIds && favoriteGenreIds.length > 0) {
+      whereClause.genreId = {
+        in: favoriteGenreIds,
+      };
+    }
+
+    const foundSuggestedStories = await this.prisma.story.findMany({
+      where: whereClause,
+      include: {
+        details: true,
+        genre: true,
+      },
+      take: 9,
+    });
+
+    return Promise.all(
+      foundSuggestedStories.map((story) =>
+        this.prepareStoryForFrontend(story, language, false),
+      ),
+    );
+  }
+
   async searchStories(params: {
     query?: string;
     genre: string[];

@@ -72,3 +72,9 @@ export function storyWithoutSectionsDtoMaker(
 export class FetchStoriesDto {
   ids: number[];
 }
+
+export class GetSuggestedStoriesDto {
+  ageGroup: StoryAgeGroup;
+  genreIds: number[];
+  excludedStoryIds?: number[];
+}

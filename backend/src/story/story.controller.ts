@@ -11,8 +11,7 @@ import {
 import { StoryService } from './story.service';
 import { getLanguageFromHeader } from '../common/utils/language.utils';
 import { StoryAgeGroup, StoryGenre } from './types/story.types';
-import { Story } from '@prisma/client';
-import { FetchStoriesDto } from './dto/story.dto';
+import { FetchStoriesDto, GetSuggestedStoriesDto } from './dto/story.dto';
 
 @Controller('stories')
 export class StoryController {
@@ -98,6 +97,22 @@ export class StoryController {
     const language = getLanguageFromHeader(acceptLanguage);
 
     return this.storiesService.getStoriesById(body.ids, language);
+  }
+
+  @Post('/suggested')
+  async getSuggestedStories(
+    @Body() body: GetSuggestedStoriesDto,
+    @Headers('accept-language') acceptLanguage?: string,
+  ) {
+    const language = getLanguageFromHeader(acceptLanguage);
+    const { ageGroup, genreIds, excludedStoryIds = [] } = body;
+
+    return this.storiesService.findSuggestedStoriesForUser(
+      ageGroup,
+      genreIds,
+      excludedStoryIds,
+      language,
+    );
   }
 
   @Post('search')
