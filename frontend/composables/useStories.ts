@@ -125,6 +125,28 @@ export const useStories = () => {
     return stories;
   }
 
+  const getLatestStories = async (): Promise<Story[]> => {
+    const { data , error } = await useFetch<StoryWithoutSections[]>(`${apiBase}/stories/latest`, {
+      headers: {
+        'Accept-Language': locale.value,
+      },
+    });
+
+    if (error.value || !data.value) throw error.value
+
+    const stories: Story[] = [];
+
+    (data.value as StoryWithSections[]).forEach((storyFromBackend) => {
+      const story: Story = new Story();
+
+      story.setValueFromStoryWithSections(storyFromBackend);
+
+      stories.push(story);
+    })
+
+    return stories;
+  }
+
   const getByDate = async (date: string): Promise<Story> => {
     const { data, error } = await useFetch(`/stories/by-date?date=${date}`, {
       headers: {
@@ -180,6 +202,7 @@ export const useStories = () => {
     getStoriesForSearchQuery,
     getStory,
     fetchStoriesInBulk,
-    fetchSuggestedStories
+    fetchSuggestedStories,
+    getLatestStories
   }
 }

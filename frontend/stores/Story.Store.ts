@@ -7,7 +7,14 @@ import {AgeGroupTypes, type FinishedStory, type StartedStory} from "@/types/Stor
 import { Story } from "@/types/classes/Story.Class";
 
 export const useStoryStore = defineStore('storyStore', () => {
-  const { getStory, getAllAvailableStories, getTextToSpeechForSection, fetchStoriesInBulk, fetchSuggestedStories } = useStories();
+  const {
+    getStory,
+    getAllAvailableStories,
+    getTextToSpeechForSection,
+    fetchStoriesInBulk,
+    fetchSuggestedStories,
+    getLatestStories
+  } = useStories();
   const selectedStory = ref<Story>(new Story());
   const currentSectionIndex = ref<number>(0)
 
@@ -130,6 +137,12 @@ export const useStoryStore = defineStore('storyStore', () => {
     )
   }
 
+  const latestStories = ref<Story[]>([]);
+
+  const fetchLatestStories = async(): Promise<void> => {
+    latestStories.value = await getLatestStories();
+  }
+
   return {
     selectedStory,
     allAvailableStories,
@@ -139,6 +152,7 @@ export const useStoryStore = defineStore('storyStore', () => {
     startedStoriesList,
     finishedStories,
     suggestedStories,
+    latestStories,
     fetchStoryByDate,
     fetchAllStories,
     fetchTextToSpeechForStory,
@@ -146,7 +160,8 @@ export const useStoryStore = defineStore('storyStore', () => {
     setNewSectionIndex,
     addStoryAsStarted,
     fetchInfoForStartedStories,
-    getSuggestedStories
+    getSuggestedStories,
+    fetchLatestStories
   }
 }, {
   persist: {

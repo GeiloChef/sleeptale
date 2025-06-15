@@ -24,6 +24,15 @@
    </section>
 
    <section
+     v-show="latestStories.length"
+     class="snap-start-container">
+    <StoryHorizontalSlider
+      :title="$t('latest-story', 2)"
+      :stories="latestStories" />
+    <Divider />
+   </section>
+
+   <section
      v-show="favoriteStoriesList.length"
      class="snap-start-container">
     <StoryHorizontalSlider
@@ -43,12 +52,13 @@ const userStore = useUserStore();
 const { favoriteStoriesList } = storeToRefs(userStore);
 
 const storyStore = useStoryStore();
-const { startedStoriesList, suggestedStories } = storeToRefs(storyStore);
+const { startedStoriesList, suggestedStories, latestStories } = storeToRefs(storyStore);
 
 onMounted(async (): Promise<void> => {
   await storyStore.fetchStoryOfTheDay();
   await storyStore.fetchInfoForStartedStories();
   await storyStore.getSuggestedStories();
+  await storyStore.fetchLatestStories();
   await userStore.fetchInfoForFavoriteStories();
 });
 </script>
