@@ -7,6 +7,7 @@
             v-for="(story, key) in stories"
             :key="key"
             class="w-56 h-auto snap-start shrink-0 rounded-xl flex flex-col gap-2"
+            :class="stories?.length > 1 ? 'w-56' : 'w-full'"
             @click="story.openStoryPage()">
             <Image
                 v-if="story.imageUrl"
