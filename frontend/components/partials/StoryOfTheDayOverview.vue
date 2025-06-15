@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-col gap-4" @click="openStory">
-    <h2 class="story-section-headline">{{ $t('story-of-the-day') }}</h2>
+    <h2 class="story-section-headline text-2xl text-center">
+     - {{ $t('story-of-the-day') }} -
+    </h2>
     <div class="flex flex-col gap-2 items-center">
       <div class="rounded-2xl overflow-hidden">
         <Image
