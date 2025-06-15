@@ -8,6 +8,9 @@ import type {Story} from "@/types/classes/Story.Class";
 export const useUserStore = defineStore('userStore', () => {
   const { fetchStoriesInBulk } = useStories();
   const user = ref(new User(getAvailableLanguages()[0]));
+
+  const favoriteGenres = ref<number[]>([]);
+
   const favoriteStories = ref<StoryFavorites[]>([]);
   const favoriteStoriesList = ref<Story[]>([]);
   const hydrateUser = (data: any): User => {
@@ -52,6 +55,7 @@ export const useUserStore = defineStore('userStore', () => {
     user,
     favoriteStories,
     favoriteStoriesList,
+    favoriteGenres,
     addStoryAsFavorite,
     removeStoryFromFavorites,
     fetchInfoForFavoriteStories
@@ -60,6 +64,6 @@ export const useUserStore = defineStore('userStore', () => {
 }, {
   persist: {
     storage: piniaPluginPersistedstate.localStorage(),
-    pick: ['user', 'favoriteStories'],
+    pick: ['user', 'favoriteStories', 'favoriteGenres'],
   }
 });

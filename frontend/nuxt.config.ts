@@ -108,6 +108,7 @@ export default defineNuxtConfig({
         'house-user',
         'ghost',
         'bolt',
+        'layer-group'
       ],
     },
     component: 'Icon',

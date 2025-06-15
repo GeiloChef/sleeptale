@@ -65,6 +65,35 @@
           </div>
         </Step>
 
+        <Divider />
+
+        <Step
+          v-slot="{ activateCallback, value, a11yAttrs }"
+          asChild
+          :value="3">
+          <div
+            class="flex flex-row flex-auto gap-2"
+            v-bind="a11yAttrs.root">
+            <button
+              class="bg-transparent border-0 inline-flex flex-col gap-2"
+              @click="activateCallback"
+              v-bind="a11yAttrs.header">
+              <span
+                :class="[
+                'step-icon',
+                {
+                  'done-step': value < activeStep,
+                  'active-step': value === activeStep,
+                  'not-done-step': value > activeStep
+                }
+              ]"
+              >
+              <Icon icon="layer-group"></Icon>
+              </span>
+            </button>
+          </div>
+        </Step>
+
       </StepList>
       <StepPanels>
         <StepPanel
@@ -98,6 +127,27 @@
 
           <div class="flex pt-6 justify-end">
             <Button
+              :label="$t('next-step')"
+              icon="pi pi-arrow-right"
+              iconPos="right"
+              @click="activateCallback(3)" />
+          </div>
+        </StepPanel>
+
+        <StepPanel
+          v-slot="{ activateCallback }"
+          :value="3">
+          <div class="flex flex-col gap-4">
+            <span class="italic">
+              {{ $t('initial-setup.genre-selection') }}
+            </span>
+
+            <FavoriteGenreSelection />
+
+          </div>
+
+          <div class="flex pt-6 justify-end">
+            <Button
               :label="$t('let-s-go')"
               icon="pi pi-arrow-right"
               iconPos="right"
@@ -112,6 +162,7 @@
 
 <script setup lang="ts">
   import {useUserStore} from "@/.nuxt/imports";
+  import FavoriteGenreSelection from "@/components/partials/FavoriteGenreSelection.vue";
 
   const visible = ref(false);
   const activeStep = ref(1);
