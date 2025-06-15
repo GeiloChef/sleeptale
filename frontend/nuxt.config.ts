@@ -33,7 +33,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
     './modules/moment',
-    'pinia-plugin-persistedstate/nuxt'
+    'pinia-plugin-persistedstate/nuxt',
+    '@vite-pwa/nuxt'
   ],
   moment: {
     locale: 'de' // oder 'es', 'fr', 'en-gb' etc.
@@ -112,5 +113,33 @@ export default defineNuxtConfig({
       ],
     },
     component: 'Icon',
+  },
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'Sleeptale',
+      short_name: 'Sleeptale',
+      description: 'Generated bedtime stories for kids and adults',
+      theme_color: '#ffffff',
+      background_color: '#ffffff',
+      display: 'standalone',
+      orientation: 'portrait',
+      start_url: '/',
+      icons: [
+        {
+          src: '/pwa-192x192.png',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: '/pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png'
+        }
+      ]
+    },
+    workbox: {
+      globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+    }
   }
 })
