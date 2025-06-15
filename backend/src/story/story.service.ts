@@ -478,6 +478,25 @@ export class StoryService {
     );
   }
 
+  async findLatestStories(language: string): Promise<StoryWithSectionsDto[]> {
+    const newestStories = await this.prisma.story.findMany({
+      orderBy: {
+        scheduledAt: 'desc',
+      },
+      take: 9,
+      include: {
+        details: true,
+        genre: true,
+      },
+    });
+
+    return Promise.all(
+      newestStories.map((story) =>
+        this.prepareStoryForFrontend(story, language, false),
+      ),
+    );
+  }
+
   async searchStories(params: {
     query?: string;
     genre: string[];

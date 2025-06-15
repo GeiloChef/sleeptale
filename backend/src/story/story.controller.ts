@@ -115,6 +115,13 @@ export class StoryController {
     );
   }
 
+  @Get('/latest')
+  async getLatestStories(@Headers('accept-language') acceptLanguage?: string) {
+    const language = getLanguageFromHeader(acceptLanguage);
+
+    return this.storiesService.findLatestStories(language);
+  }
+
   @Post('search')
   async searchStories(
     @Body('query') query?: string,
