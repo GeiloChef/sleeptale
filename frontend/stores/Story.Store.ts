@@ -7,7 +7,7 @@ import {AgeGroupTypes, type FinishedStory, type StartedStory} from "@/types/Stor
 import { Story } from "@/types/classes/Story.Class";
 
 export const useStoryStore = defineStore('storyStore', () => {
-  const { getStory, getAllAvailableStories, getTextToSpeechForSection, fetchStoriesInBulk } = useStories();
+  const { getStory, getAllAvailableStories, getTextToSpeechForSection, fetchStoriesInBulk, fetchSuggestedStories } = useStories();
   const selectedStory = ref<Story>(new Story());
   const currentSectionIndex = ref<number>(0)
 
@@ -113,6 +113,23 @@ export const useStoryStore = defineStore('storyStore', () => {
     }
   }
 
+  const suggestedStories = ref<Story[]>([])
+
+  const getSuggestedStories = async(): Promise<void> => {
+    const userStore = useUserStore();
+    const favoriteStoryIds = userStore.favoriteStories.flatMap((favoriteStory) => favoriteStory.id);
+    const startedStoryIds =  startedStories.value.flatMap((startedStory) => startedStory.id);
+    const finishedStoryIds = finishedStories.value.flatMap((finishedStory) => finishedStory.id);
+
+    const storyIdsToExclude = favoriteStoryIds.concat(startedStoryIds).concat(finishedStoryIds) as number[];
+
+    suggestedStories.value = await fetchSuggestedStories(
+      userStore.user.getUserAgeGroup(),
+      userStore.favoriteGenres,
+      storyIdsToExclude
+    )
+  }
+
   return {
     selectedStory,
     allAvailableStories,
@@ -121,13 +138,15 @@ export const useStoryStore = defineStore('storyStore', () => {
     startedStories,
     startedStoriesList,
     finishedStories,
+    suggestedStories,
     fetchStoryByDate,
     fetchAllStories,
     fetchTextToSpeechForStory,
     fetchStoryOfTheDay,
     setNewSectionIndex,
     addStoryAsStarted,
-    fetchInfoForStartedStories
+    fetchInfoForStartedStories,
+    getSuggestedStories
   }
 }, {
   persist: {

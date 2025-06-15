@@ -75,6 +75,34 @@ export const useStories = () => {
     return stories;
   }
 
+  const fetchSuggestedStories = async (ageGroup: AgeGroupTypes, genreIds: number[], excludedStoryIds: number[]): Promise<Story[]> => {
+    const { data , error } = await useFetch<StoryWithoutSections[]>(`${apiBase}/stories/suggested`, {
+      headers: {
+        'Accept-Language': locale.value,
+      },
+      method: 'POST',
+      body : {
+        ageGroup,
+        genreIds,
+        excludedStoryIds
+      }
+    });
+
+    if (error.value || !data.value) throw error.value
+
+    const stories: Story[] = [];
+
+    (data.value as StoryWithSections[]).forEach((storyFromBackend) => {
+      const story: Story = new Story();
+
+      story.setValueFromStoryWithSections(storyFromBackend);
+
+      stories.push(story);
+    })
+
+    return stories;
+  }
+
   const getAllAvailableStories = async (): Promise<Story[]> => {
     const { data , error } = await useFetch<StoryWithoutSections[]>(`${apiBase}/stories/all`, {
       headers: {
@@ -151,6 +179,7 @@ export const useStories = () => {
     getTextToSpeechForSection,
     getStoriesForSearchQuery,
     getStory,
-    fetchStoriesInBulk
+    fetchStoriesInBulk,
+    fetchSuggestedStories
   }
 }
