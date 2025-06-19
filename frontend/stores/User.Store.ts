@@ -13,24 +13,6 @@ export const useUserStore = defineStore('userStore', () => {
 
   const favoriteStories = ref<StoryFavorites[]>([]);
   const favoriteStoriesList = ref<Story[]>([]);
-  const hydrateUser = (data: any): User => {
-    return Object.assign(new User(data.language), data);
-  }
-
-  if (process.client && sessionStorage.getItem('userStore')) {
-    try {
-      const parsed = JSON.parse(sessionStorage.getItem('userStore')!);
-      if (parsed.user) {
-        user.value = hydrateUser(parsed.user);
-      }
-    } catch (e) {
-      console.error('Failed to hydrate user from sessionStorage:', e);
-    }
-  }
-
-  if (!user.value) {
-    user.value = new User(getAvailableLanguages()[0]);
-  }
 
   const addStoryAsFavorite = (storyId: string | number): void => {
     favoriteStories.value.push({
@@ -65,5 +47,21 @@ export const useUserStore = defineStore('userStore', () => {
   persist: {
     storage: piniaPluginPersistedstate.localStorage(),
     pick: ['user', 'favoriteStories', 'favoriteGenres'],
+    serializer: {
+      serialize: JSON.stringify,
+      deserialize: (value: string) => {
+        const parsed = JSON.parse(value);
+
+        if (parsed.user) {
+          parsed.user = Object.assign(new User(parsed.user.language), parsed.user);
+          console.log(parsed.user)
+        } else {
+          parsed.user = Object.assign(new User(getAvailableLanguages()[0]), parsed.user)
+          console.log(parsed.user)
+        }
+
+        return parsed;
+      }
+    }
   }
 });

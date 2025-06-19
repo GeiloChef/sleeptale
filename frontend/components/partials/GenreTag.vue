@@ -3,7 +3,9 @@
     :style="genreStyles"
     class="text-white">
     <Icon :icon="icon" />
-    <span>{{ $t(selectedGenre.label) }}</span>
+    <span v-if="selectedGenre">
+      {{ $t(selectedGenre.label) }}
+    </span>
   </Tag>
 </template>
 

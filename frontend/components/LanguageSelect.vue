@@ -1,6 +1,6 @@
 <template>
   <Select
-      v-model="user"
+      :modelValue="user.getLanguage()"
       :options="availableLanguages"
       optionLabel="label"
       :placeholder="$t('select-a-language')"
