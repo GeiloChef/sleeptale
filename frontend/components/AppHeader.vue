@@ -32,7 +32,8 @@ import { navigateByRouteName } from "@/utils/Navigation.Utils";
 const props = defineProps({
   showBackButton: {
     type: Boolean,
-    required: true
+    required: false,
+    default: false
   },
 });
 
