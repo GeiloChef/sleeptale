@@ -46,6 +46,7 @@ export default defineNuxtConfig({
     locale: 'de',
     locales: [
       { "code": "en", "language": 'en-US', "file": "en.json", "dir": "ltr" },
+      { "code": "es", "language": 'es-ES', "file": "es.json", "dir": "ltr" },
       { "code": "de", "language": 'de-DE', "file": "de.json", "dir": "ltr" }
     ]
   },
