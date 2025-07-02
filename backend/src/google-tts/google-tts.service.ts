@@ -22,7 +22,7 @@ const LANGUAGE_SETTINGS: Record<string, GoogleTtsVoiceSettings> = {
   },
   es: {
     languageCode: 'es-ES',
-    voiceName: 'es-ES-Wavenet-A',
+    voiceName: 'es-ES-Chirp3-HD-Umbriel',
   },
 };
 

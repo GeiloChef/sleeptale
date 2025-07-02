@@ -14,7 +14,7 @@ export class GoogleTtsController {
     return { filePath };
   }
 
-  @Post(':language/:storyId/:sectionId')
+  @Post('/:storyId/:sectionId')
   async synthesizeFromStorySection(
     @Param('storyId') storyId: string,
     @Param('sectionId') sectionId: string,
