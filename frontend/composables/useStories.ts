@@ -163,7 +163,7 @@ export const useStories = () => {
   }
 
   const getTextToSpeechForSection = async (storyId: number, sectionId: number): Promise<string> => {
-    const { data, error } = await useFetch(`${apiBase}/tts/de/${storyId}/${sectionId}`, {
+    const { data, error } = await useFetch(`${apiBase}/tts/${storyId}/${sectionId}`, {
       headers: {
         'Accept-Language': locale.value,
       },
